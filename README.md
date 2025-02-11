@@ -4,3 +4,4 @@ Hopes Studio V-1 is platform to booking schedule pilates training in Bekasi West
 ### Tools Development
 Framework Backend : Laravel Version 11 <br>
 Design Interface : Figma
+Design ERD : Draw.io
