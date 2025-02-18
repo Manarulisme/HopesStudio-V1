@@ -3,26 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beranda</title>
+    <title>Hopes Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
-    <nav class="bg-white shadow-md p-4 flex justify-between items-center">
-        <h1 class="text-2xl font-bold text-gray-700">Logo</h1>
-        <div>
-            <a href="#" class="text-blue-500 px-4">Login</a>
-            <a href="#" class="text-white bg-blue-500 px-4 py-2 rounded">Register</a>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="bg-white p-6 rounded-2xl shadow-lg max-w-sm text-center">
+        <div class="flex justify-center mb-4">
+            <img src="{{asset('Assets/Images/pilates_ilustrator.png')}}" alt="Yoga Illustration" class="rounded-lg">
         </div>
-    </nav>
-
-    <section class="text-center py-20">
-        <h2 class="text-4xl font-bold text-gray-800">Selamat Datang di Website Kami</h2>
-        <p class="text-gray-600 mt-4">Solusi terbaik untuk kebutuhan Anda</p>
-        <a href="#" class="mt-6 inline-block bg-blue-500 text-white px-6 py-3 rounded">Mulai Sekarang</a>
-    </section>
-
-    <footer class="bg-gray-800 text-white text-center p-4 mt-10">
-        &copy; 2025 Semua Hak Dilindungi
-    </footer>
+        <h1 class="text-lg font-bold text-gray-800">Hopes Studio</h1>
+        <p class="text-xl font-semibold text-gray-900 mt-2">Gerak-gerik seru asyik<br> Tubuh makin kece</p>
+        <p class="text-gray-600 mt-2">Yuk, bikin hari-harimu lebih berwarna dengan gerakan yang menyenangkan!</p>
+        <div class="mt-4">
+            <button class="w-full bg-blue-500 text-white py-2 rounded-lg font-semibold"><a href="{{route('login_user')}}">Login</a></button>
+            <button class="w-full mt-2 border border-gray-400 text-gray-700 py-2 rounded-lg font-semibold"><a href="{{route('register_user')}}">Register</a></button>
+        </div>
+    </div>
 </body>
 </html>

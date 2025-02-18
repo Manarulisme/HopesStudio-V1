@@ -16,4 +16,19 @@ class BerandaController extends Controller
     {
         return view('Login');
     }
+
+    public function register(): View
+    {
+        return view('Register');
+    }
+
+    public function forgot(): View
+    {
+        return view('Forgot');
+    }
+
+    public function sendOTP(): View
+    {
+        return view('SendOTP');
+    }
 }
