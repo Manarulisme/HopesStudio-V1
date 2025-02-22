@@ -63,4 +63,14 @@ class PembayaranController extends Controller
     {
         //
     }
+
+    public function konfirmasiPembayaran()
+    {
+        return view('UserPage.ConfirmPayPage');
+    }
+
+    public function bayarPaket()
+    {
+        return view('UserPage.PayPackagePage');
+    }
 }

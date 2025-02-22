@@ -11,4 +11,9 @@ class UserController extends Controller
     {
         return view('UserPage.ProfilPage');
     }
+
+    public function SuntingProfil(): View
+    {
+        return view('UserPage.SuntingProfilPage');
+    }
 }

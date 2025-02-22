@@ -31,4 +31,9 @@ class BerandaController extends Controller
     {
         return view('SendOTP');
     }
+
+    public function ResetPassword(): View
+    {
+        return view('ResetPassword');
+    }
 }

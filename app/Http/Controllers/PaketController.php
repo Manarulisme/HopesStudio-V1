@@ -13,7 +13,7 @@ class PaketController extends Controller
      */
     public function index()
     {
-        //
+        return view('UserPage.ActivePackagePage');
     }
 
     /**
@@ -62,5 +62,10 @@ class PaketController extends Controller
     public function destroy(Paket $paket)
     {
         //
+    }
+
+    public function orderPaket()
+    {
+        return view('UserPage.OrderPackagePage');
     }
 }

@@ -63,4 +63,14 @@ class JadwalController extends Controller
     {
         //
     }
+
+    public function listSchedule()
+    {
+        return view('UserPage.SchedulePage');
+    }
+
+    public function orderSchedule()
+    {
+        return view('UserPage.OrderScedulePage');
+    }
 }

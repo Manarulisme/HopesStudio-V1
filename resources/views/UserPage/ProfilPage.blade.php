@@ -13,8 +13,14 @@
             <p><strong>Nomor HP:</strong> 083827272727</p>
             <p><strong>Email:</strong> citraayunda@gmail.com</p>
         </div>
-        <button class="w-full bg-blue-600 text-white p-2 rounded-lg font-semibold hover:bg-blue-700 mt-4">Sunting Profil</button>
-        <button class="w-full bg-red-500 text-white p-2 rounded-lg font-semibold hover:bg-red-700 mt-2"><a href="{{route('login_user')}}">Logout</a></button>
+        <a href="{{ route('sunting_profil_user') }}">
+            <button class="w-full bg-blue-600 text-white p-2 rounded-lg font-semibold hover:bg-blue-700 mt-4">Sunting Profil</button>
+        </a>
+
+        <a href="{{route('login_user')}}">
+            <button class="w-full bg-red-500 text-white p-2 rounded-lg font-semibold hover:bg-red-700 mt-2">Logout</button>
+        </a>
+
     </div>
 </div>
 @endsection
