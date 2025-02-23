@@ -63,4 +63,14 @@ class ArtikelController extends Controller
     {
         //
     }
+
+    public function detailartikel()
+    {
+        return view('UserPage.DetailArtikelPage');
+    }
+
+    public function listArtikel()
+    {
+        return view('UserPage.ListArtikelPage');
+    }
 }

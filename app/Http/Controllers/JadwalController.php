@@ -73,4 +73,9 @@ class JadwalController extends Controller
     {
         return view('UserPage.OrderScedulePage');
     }
+
+    public function cariSchedule()
+    {
+        return view('UserPage.CariSchedulePage');
+    }
 }

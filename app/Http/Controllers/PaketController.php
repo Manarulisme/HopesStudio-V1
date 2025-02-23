@@ -11,10 +11,7 @@ class PaketController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        return view('UserPage.ActivePackagePage');
-    }
+    public function index() {}
 
     /**
      * Show the form for creating a new resource.
@@ -62,6 +59,11 @@ class PaketController extends Controller
     public function destroy(Paket $paket)
     {
         //
+    }
+
+    public function aktifPaket()
+    {
+        return view('UserPage.ActivePackagePage');
     }
 
     public function orderPaket()

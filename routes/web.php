@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JadwalController;
@@ -29,7 +30,7 @@ Route::get('/profil-user', [UserController::class, 'Profil'])->name('profil_user
 
 Route::get('/dashboard-user', [DashboardController::class, 'index'])->name('dashboard_user');
 
-Route::get('/paket-user', [PaketController::class, 'index'])->name('paket_user');
+Route::get('/paket-user', [PaketController::class, 'aktifPaket'])->name('paket_user');
 
 Route::get('/konfirmasi-pembayaran', [PembayaranController::class, 'konfirmasiPembayaran'])->name('konfirmasi_pembayaran_user');
 
@@ -42,6 +43,12 @@ Route::get('/order-schedule', [JadwalController::class, 'orderSchedule'])->name(
 Route::get('/order-paket', [PaketController::class, 'orderPaket'])->name('order_paket_user');
 
 Route::get('/jadwal-user', [JadwalController::class, 'listSchedule'])->name('jadwal_user');
+
+Route::get('/cari-jadwal', [JadwalController::class, 'cariSchedule'])->name('cari_jadwal_user');
+
+Route::get('/detail-artikel', [ArtikelController::class, 'detailArtikel'])->name('detail_artikel_user');
+
+Route::get('/list-artikel', [ArtikelController::class, 'listArtikel'])->name('list_artikel_user');
 
 
 

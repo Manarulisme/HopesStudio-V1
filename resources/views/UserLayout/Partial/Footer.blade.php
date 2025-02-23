@@ -11,7 +11,7 @@
         </a>
         <a href="{{ route('jadwal_user') }}" class="flex flex-col items-center text-sm bg-[#0D99FF] text-white p-2 rounded-full">
             <img src="{{ asset('Assets/Images/icons/jadwal_menu.svg') }}" class="w-6 h-6" alt="Jadwal Menu">Jadwal
-        <a href="#" class="flex flex-col items-center text-sm">
+        <a href="{{ route('list_artikel_user') }}" class="flex flex-col items-center text-sm">
             <img src="{{ asset('Assets/Images/icons/artikel_menu.svg') }}" class="w-6 h-6" alt="Artikel Menu">
             Artikel
         </a>
