@@ -21,10 +21,10 @@
 
         <form>
             <label class="block text-left mb-2 font-semibold">Email</label>
-            <input type="email" placeholder="Masukkan Email.." class="w-full p-3 border rounded-lg mb-4 bg-gray-100">
+            <input type="email" placeholder="Masukkan Email.." class="w-full p-3 border rounded-lg mb-4 bg-gray-100" name="email">
 
             <label class="block text-left mb-2 font-semibold">Password</label>
-            <input type="password" placeholder="Masukkan Password.." class="w-full p-3 border rounded-lg mb-2 bg-gray-100">
+            <input type="password" placeholder="Masukkan Password.." class="w-full p-3 border rounded-lg mb-2 bg-gray-100" name="password">
 
             <div class="text-right mb-4">
                 <a href="{{route('forgot_user')}}" class="text-blue-600 hover:underline">Forgot Password ?</a>

@@ -1,59 +1,71 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ArtikelController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\PaketController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\UserController;
-use App\Models\Jadwal;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+// Public routes
+Route::get('/', [BerandaController::class, 'index'])->name('beranda_user');
+Route::get('/login-user', [BerandaController::class, 'login'])->name('login_user');
+Route::post('/login-user', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/register-user', [BerandaController::class, 'register'])->name('register_user');
+Route::get('/forgot-user', [BerandaController::class, 'forgot'])->name('forgot_user');
+Route::get('/send-otp', [BerandaController::class, 'sendOTP'])->name('send_otp_user');
+Route::get('/reset-password-user', [BerandaController::class, 'ResetPassword'])->name('reset_password_user');
+
+// Admin routes
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/dashboard', [DashboardController::class, 'adminIndex'])->name('dashboard_admin');
+    Route::get('/admin/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/admin/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/admin/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Add other admin routes here
 });
 
-Route::get('/beranda', [BerandaController::class, 'index'])->name('beranda_user');
+// User routes
+Route::middleware(['auth', 'role:user'])->group(function () {
+    Route::get('/dashboard-user', [DashboardController::class, 'userIndex'])->name('dashboard_user');
+    Route::get('/profil-user', [UserController::class, 'Profil'])->name('profil_user');
+    Route::get('/paket-user', [PaketController::class, 'aktifPaket'])->name('paket_user');
+    Route::get('/konfirmasi-pembayaran', [PembayaranController::class, 'konfirmasiPembayaran'])->name('konfirmasi_pembayaran_user');
+    Route::get('/pembayaran-user', [PembayaranController::class, 'bayarPaket'])->name('pembayaran_user');
+    Route::get('/sunting-profil', [UserController::class, 'SuntingProfil'])->name('sunting_profil_user');
+    Route::get('/order-schedule', [JadwalController::class, 'orderSchedule'])->name('order_schedule_user');
+    Route::get('/order-paket', [PaketController::class, 'orderPaket'])->name('order_paket_user');
+    Route::get('/jadwal-user', [JadwalController::class, 'listSchedule'])->name('jadwal_user');
+    Route::get('/cari-jadwal', [JadwalController::class, 'cariSchedule'])->name('cari_jadwal_user');
+    Route::get('/detail-artikel', [ArtikelController::class, 'detailArtikel'])->name('detail_artikel_user');
+    Route::get('/list-artikel', [ArtikelController::class, 'listArtikel'])->name('list_artikel_user');
+});
 
-Route::get('/login', [BerandaController::class, 'login'])->name('login_user');
+// // Common authenticated routes
+// Route::middleware('auth')->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// });
 
-Route::get('/register', [BerandaController::class, 'register'])->name('register_user');
+// Define a common dashboard route that redirects based on user role
+Route::get('/dashboard', function () {
+    $user = Auth::user();
+    if ($user->role === 'admin') {
+        return redirect()->route('dashboard_admin');
+    } elseif ($user->role === 'user') {
+        return redirect()->route('dashboard_user');
+    }
+    return redirect('/');
+})->name('dashboard');
 
-Route::get('/forgot', [BerandaController::class, 'forgot'])->name('forgot_user');
-
-Route::get('/send-otp', [BerandaController::class, 'sendOTP'])->name('send_otp_user');
-
-Route::get('/reset-password', [BerandaController::class, 'ResetPassword'])->name('reset_password_user');
-
-Route::get('/profil-user', [UserController::class, 'Profil'])->name('profil_user');
-
-Route::get('/dashboard-user', [DashboardController::class, 'index'])->name('dashboard_user');
-
-Route::get('/paket-user', [PaketController::class, 'aktifPaket'])->name('paket_user');
-
-Route::get('/konfirmasi-pembayaran', [PembayaranController::class, 'konfirmasiPembayaran'])->name('konfirmasi_pembayaran_user');
-
-Route::get('/pembayaran-user', [PembayaranController::class, 'bayarPaket'])->name('pembayaran_user');
-
-Route::get('/sunting-profil', [UserController::class, 'SuntingProfil'])->name('sunting_profil_user');
-
-Route::get('/order-schedule', [JadwalController::class, 'orderSchedule'])->name('order_schedule_user');
-
-Route::get('/order-paket', [PaketController::class, 'orderPaket'])->name('order_paket_user');
-
-Route::get('/jadwal-user', [JadwalController::class, 'listSchedule'])->name('jadwal_user');
-
-Route::get('/cari-jadwal', [JadwalController::class, 'cariSchedule'])->name('cari_jadwal_user');
-
-Route::get('/detail-artikel', [ArtikelController::class, 'detailArtikel'])->name('detail_artikel_user');
-
-Route::get('/list-artikel', [ArtikelController::class, 'listArtikel'])->name('list_artikel_user');
-
-
-
-
-
+require __DIR__.'/auth.php';
 
 Route::get('/check-timezone', function () {
     return [

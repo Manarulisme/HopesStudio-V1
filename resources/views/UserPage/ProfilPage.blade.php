@@ -8,18 +8,19 @@
             <img src="{{asset('Assets/Images/profil_user.png')}}" alt="Profile Picture" class="w-24 h-24 rounded-full mx-auto border-4 border-white">
         </div>
         <div class="bg-gray-200 p-4 rounded-lg mt-4 text-left">
-            <p><strong>Nama Lengkap:</strong> Citra Ayunda</p>
-            <p><strong>Alamat:</strong> Jl. Pegangsaan Timur No.10 Jakarta Barat</p>
-            <p><strong>Nomor HP:</strong> 083827272727</p>
-            <p><strong>Email:</strong> citraayunda@gmail.com</p>
+            <p><strong>Nama Lengkap:</strong> {{ Auth::user()->name }}</p>
+            <p><strong>Alamat:</strong> {{ Auth::user()->alamat }}</p>
+            <p><strong>Nomor HP:</strong> {{ Auth::user()->no_telepon }}</p>
+            <p><strong>Email:</strong> {{ Auth::user()->email }}</p>
         </div>
         <a href="{{ route('sunting_profil_user') }}">
             <button class="w-full bg-blue-600 text-white p-2 rounded-lg font-semibold hover:bg-blue-700 mt-4">Sunting Profil</button>
         </a>
 
-        <a href="{{route('login_user')}}">
-            <button class="w-full bg-red-500 text-white p-2 rounded-lg font-semibold hover:bg-red-700 mt-2">Logout</button>
-        </a>
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="w-full bg-red-500 text-white p-2 rounded-lg font-semibold hover:bg-red-700 mt-2">Logout</button>
+        </form>
 
     </div>
 </div>

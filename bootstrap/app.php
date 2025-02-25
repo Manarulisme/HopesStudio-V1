@@ -16,3 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
+
+    $app->bind('role', function ($app, $parameters) {
+        return new \App\Http\Middleware\CheckRole($parameters[0]);
+    });
+
