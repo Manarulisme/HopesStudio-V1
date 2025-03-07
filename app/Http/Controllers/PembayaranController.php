@@ -13,7 +13,9 @@ class PembayaranController extends Controller
      */
     public function index()
     {
-        //
+        //list Konfiramsi Pembayaran
+        $pembayarans = Pembayaran::all();
+        return view('AdminPage.Konfirmasi.IndexKonfirmasi', compact('pembayarans'));
     }
 
     /**
@@ -21,7 +23,7 @@ class PembayaranController extends Controller
      */
     public function create()
     {
-        //
+        // return view('AdminPage.Konfirmasi.CreateKonfirmasi');
     }
 
     /**
@@ -29,7 +31,19 @@ class PembayaranController extends Controller
      */
     public function store(StorePembayaranRequest $request)
     {
-        //
+        // //validasi pembayaran
+        // $validated = $request->validated();
+        // //upload bukti pembayaran ke local storage
+        // $path = $request->file('bukti_pembayaran')->store('Assets/Images/bukti_pembayaran', 'public');
+        // //create pembayaran
+        // Pembayaran::create([
+        //     'kode_pembayaran' => $request->kode_pembayaran,
+        //     'nama_pengirim' => $request->nama_pengirim,
+        //     'bukti_pembayaran' => $path,
+        //     'status_pembayaran' => $request->status_pembayaran,
+        //     'tanggal_pembayaran' => $request->tanggal_pembayaran,
+        // ]);
+        // return redirect()->route('pembayaran.index')->with('success', 'Pembayaran created successfully.');
     }
 
     /**

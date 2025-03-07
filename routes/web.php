@@ -6,9 +6,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\OrderPaketController;
 use App\Http\Controllers\PaketController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserProfilController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -28,13 +30,28 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/admin/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/admin/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    // Add other admin routes here
+    // Route Resource Paket
+    Route::resource('/admin/paket', PaketController::class);
+    // Route Resource Jadwal
+    Route::resource('/admin/jadwal', JadwalController::class);
+    // Route Resource Pembayaran
+    Route::resource('/admin/pembayaran', PembayaranController::class);
+    // Route Resource Artikel
+    Route::resource('/admin/artikel', ArtikelController::class);
+    // Route Resource User
+    Route::resource('/admin/user', UserController::class);
+    // Route Resource Admin
+    Route::resource('/admin/admin', ProfileController::class);
+
 });
 
 // User routes
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/dashboard-user', [DashboardController::class, 'userIndex'])->name('dashboard_user');
-    Route::get('/profil-user', [UserController::class, 'Profil'])->name('profil_user');
+    // Order Paket
+    Route::resource('order-paket', OrderPaketController::class);
+    Route::get('/pay-package/{id}', [OrderPaketController::class, 'showPayPackagePage'])->name('show_pay_package');
+    Route::resource('profil-user', UserProfilController::class);
     Route::get('/paket-user', [PaketController::class, 'aktifPaket'])->name('paket_user');
     Route::get('/konfirmasi-pembayaran', [PembayaranController::class, 'konfirmasiPembayaran'])->name('konfirmasi_pembayaran_user');
     Route::get('/pembayaran-user', [PembayaranController::class, 'bayarPaket'])->name('pembayaran_user');
@@ -47,12 +64,6 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/list-artikel', [ArtikelController::class, 'listArtikel'])->name('list_artikel_user');
 });
 
-// // Common authenticated routes
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-// });
 
 // Define a common dashboard route that redirects based on user role
 Route::get('/dashboard', function () {

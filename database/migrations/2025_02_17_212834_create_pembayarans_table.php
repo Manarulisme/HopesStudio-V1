@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('pembayarans', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_pembayaran',50);
-            $table->string('bukti_pembayaran',255);
-            $table->enum('status_pembayaran', ['pending', 'approved', 'rejected']);
-            $table->dateTime('tanggal_pembayaran');
+            $table->string('kode_pembayaran',50)->nullable();
+            $table->string('nama_pengirim',50)->nullable();
+            $table->string('bukti_pembayaran',255)->nullable();
+            $table->enum('status_pembayaran', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->dateTime('tanggal_pembayaran')->nullable();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('paket_id')->constrained('pakets')->onDelete('cascade');
             $table->timestamps();

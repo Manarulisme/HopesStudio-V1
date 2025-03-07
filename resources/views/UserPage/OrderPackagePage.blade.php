@@ -11,26 +11,30 @@
     </button>
 
     <div class="relative w-full rounded-lg overflow-hidden">
-        <img src="{{ asset('Assets/Images/dashboard-popular.png') }}" alt="Pilates" class="w-full h-48 object-cover">
-        <div class="absolute top-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded-lg text-sm font-bold">1 Sesi</div>
+        <img src="{{ asset('Assets/Images/dashboard-popular.png') }}" alt="foto paket" class="w-full h-48 object-cover">
+        <div class="absolute top-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded-lg text-sm font-bold">Paket {{ $OrderPakets->jumlah_sesi }} Sesi</div>
     </div>
 
     <h2 class="text-lg font-bold mt-4">Deskripsi</h2>
     <div class="bg-gray-200 p-3 rounded-lg text-sm text-gray-700">
-        Nikmati sesi pilates pribadi dengan instruktur berpengalaman. Latihan ini dirancang untuk meningkatkan fleksibilitas, kekuatan inti, dan postur tubuh, serta membantu relaksasi dan keseimbangan. Cocok untuk pemula maupun tingkat lanjut. Dapatkan pengalaman latihan yang menyegarkan dan menyehatkan tubuh dalam satu sesi!
+        {{ $OrderPakets->deskripsi }}
     </div>
 
     <h2 class="text-lg font-bold mt-4">Informasi Diri</h2>
     <div class="bg-gray-200 p-3 rounded-lg text-sm text-gray-700">
-        <p><span class="font-bold">Nama</span><br>Laila Syafawi</p>
-        <p class="mt-2"><span class="font-bold">Email</span><br>lailasyafawi@gmail.com</p>
-        <p class="mt-2"><span class="font-bold">No. HP</span><br>08374829299</p>
+        <p><span class="font-bold">Nama</span><br>{{ Auth::user()->name }}</p>
+        <p class="mt-2"><span class="font-bold">Email</span><br>{{ Auth::user()->email }}</p>
+        <p class="mt-2"><span class="font-bold">No. HP</span><br>{{ Auth::user()->no_telepon }}</p>
         <p class="mt-2 flex justify-between items-center">
             <span class="font-bold">Total Harga</span>
-            <span class="text-blue-500 font-bold">Rp. 25.000</span>
+            <span class="text-blue-500 font-bold">Rp. {{ number_format($OrderPakets->harga, 0, ',', '.') }}</span>
         </p>
     </div>
 
-    <button class="mt-4 w-full bg-blue-500 text-white font-bold py-2 rounded-lg mb-20">Pesan Sekarang</button>
+    <form action="{{ route('order-paket.store') }}" method="POST">
+        @csrf
+        <input type="hidden" name="OrderPakets_id" value="{{ $OrderPakets->id }}">
+        <button type="submit" class="mt-4 w-full bg-blue-500 text-white font-bold py-2 rounded-lg mb-20">Pesan Sekarang</button>
+    </form>
 </div>
 @endsection

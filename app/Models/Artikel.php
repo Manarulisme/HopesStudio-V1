@@ -9,4 +9,11 @@ class Artikel extends Model
 {
     /** @use HasFactory<\Database\Factories\ArtikelFactory> */
     use HasFactory;
+    protected $fillable = [
+        'judul',
+        'slug',
+        'konten',
+        'gambar_utama',
+        'user_id',
+    ];
 }

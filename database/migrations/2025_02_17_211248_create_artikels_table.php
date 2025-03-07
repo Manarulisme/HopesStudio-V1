@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('artikels', function (Blueprint $table) {
             $table->id();
             $table->string('judul', 255);
+            $table->string('gambar_utama');
             $table->text('konten');
-            $table->string('slug', 255);
-            $table->string('penulis', 255);
+            $table->string('slug', 255)->nullable();
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }

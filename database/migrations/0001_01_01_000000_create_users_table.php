@@ -18,9 +18,10 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['admin', 'user'])->default('user');
+            $table->string('nik', 20)->nullable();
             $table->string('no_telepon', 15)->nullable();
             $table->text('alamat')->nullable();
-            $table->string('foto_profil', 255)->nullable();
+            $table->string('foto_profil')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

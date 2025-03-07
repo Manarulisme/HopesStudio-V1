@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('aktif_pakets', function (Blueprint $table) {
             $table->id();
-            $table->enum('status_paket', ['aktif', 'nonaktif']);
+            $table->enum('status_paket', ['aktif', 'pending', 'nonaktif'])->default('pending');
             $table->integer('sisa_sesi');
             $table->dateTime('tanggal_aktif');
+            $table->dateTime('tanggal_kadaluarsa');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('paket_id')->constrained('pakets')->onDelete('cascade');
             $table->foreignId('pembayaran_id')->constrained('pembayarans')->onDelete('cascade');

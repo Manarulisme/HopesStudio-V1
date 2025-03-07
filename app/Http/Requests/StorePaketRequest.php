@@ -11,7 +11,7 @@ class StorePaketRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class StorePaketRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nama_paket' => ['required'],
+            'harga' => ['required'],
+            'jumlah_sesi' => ['required'],
+            'masa_aktif_hari' => ['required'],
+            'deskripsi' => ['required'],
         ];
     }
 }

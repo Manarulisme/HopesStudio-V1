@@ -5,20 +5,31 @@ namespace App\Http\Controllers;
 use App\Models\Paket;
 use App\Http\Requests\StorePaketRequest;
 use App\Http\Requests\UpdatePaketRequest;
+use Illuminate\Contracts\View\View;
+
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class PaketController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
-    public function index() {}
+    public function index() : View
+    {
+
+        $pakets = Paket::all();
+
+        return view('AdminPage.Paket.IndexPaket', compact('pakets'));
+    }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        $this->authorize('create', Paket::class);
+        return view('AdminPage.Paket.CreatePaket');
     }
 
     /**
@@ -26,7 +37,15 @@ class PaketController extends Controller
      */
     public function store(StorePaketRequest $request)
     {
-        //
+        $this->authorize('store', Paket::class);
+        //Validate Form
+        $request->validated();
+
+        //create paket
+        Paket::create($request->all());
+
+        //redirect to index paket
+        return redirect()->route('paket.index');
     }
 
     /**

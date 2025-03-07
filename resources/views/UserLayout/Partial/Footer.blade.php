@@ -15,7 +15,7 @@
             <img src="{{ asset('Assets/Images/icons/artikel_menu.svg') }}" class="w-6 h-6" alt="Artikel Menu">
             Artikel
         </a>
-        <a href="{{ route('profil_user') }}" class="flex flex-col items-center text-sm">
+        <a href="{{ route('profil-user.index') }}" class="flex flex-col items-center text-sm">
             <img src="{{ asset('Assets/Images/icons/profil_menu.svg') }}" class="w-6 h-6" alt="Profil Menu">
             Saya
         </a>

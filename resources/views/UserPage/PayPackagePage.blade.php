@@ -1,47 +1,31 @@
 @extends('UserLayout.MainLayout')
 
-@section('title', 'Paket Pembayaran')
+@section('title', 'Pembayaran Paket')
 
 @section('content')
 <div class="max-w-md mx-auto bg-white min-h-screen p-4">
-    <h1 class="text-lg font-bold mb-4">Metode Pembayaran</h1>
-    <div class="bg-white p-4 shadow-md rounded-lg mb-4 text-center">
-        <p class="font-semibold">Kode Bayar : <span class="text-gray-700">#33156A1</span></p>
-        <div class="flex flex-col items-center my-4">
-            <img src="{{ asset('Assets/Images/icons/logo_bca.png') }}" alt="BCA Logo" class="h-10">
-            <span class="mt-2 italic text-lg font-bold">An. Hopes Studio</span>
-        </div>
-        <div class="flex items-center justify-center space-x-2">
-            <img src="{{ asset('Assets/Images/icons/copy_text.svg') }}" alt="Copy" class="w-5 h-5 cursor-pointer" onclick="copyToClipboard('2831374717')">
-            <p class="text-lg font-bold text-gray-800">2831374717</p>
-        </div>
-        <div class="flex items-center justify-center space-x-2 mt-2">
-            <img src="{{ asset('Assets/Images/icons/copy_text.svg') }}" alt="Copy" class="w-5 h-5 cursor-pointer" onclick="copyToClipboard('25000')">
-            <p class="text-lg font-bold text-red-500">Rp. 25.000</p>
-        </div>
-        <p class="text-red-500 text-sm mt-2">&#9679; Screenshot apabila diperlukan</p>
+    <button onclick="window.history.back()" class="text-gray-600 mb-4 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+    </button>
+
+    <h2 class="text-lg font-bold mt-4">Detail Pembayaran</h2>
+    <div class="bg-gray-200 p-3 rounded-lg text-sm text-gray-700">
+        <p><span class="font-bold">Kode Pembayaran</span><br>{{ $pembayaran->kode_pembayaran }}</p>
+        <p class="mt-2"><span class="font-bold">Nama Pengirim</span><br>{{ $pembayaran->nama_pengirim }}</p>
+        <p class="mt-2"><span class="font-bold">Tanggal Pembayaran</span><br>{{ $pembayaran->tanggal_pembayaran }}</p>
+        <p class="mt-2"><span class="font-bold">Status Pembayaran</span><br>{{ ucfirst($pembayaran->status_pembayaran) }}</p>
+        <p class="mt-2"><span class="font-bold">Total Harga</span><br>Rp. {{ number_format($pembayaran->paket->harga, 0, ',', '.') }}</p>
     </div>
 
-    <h2 class="text-lg font-bold mb-2">Petunjuk Akhir</h2>
-    <div class="bg-white p-4 shadow-md rounded-lg mb-4">
-        <p class="text-gray-700">Setelah anda melakukan transfer pada rekening tersebut, selanjutnya anda diharapkan untuk mengirimkan bukti transfer pada tombol di bawah ini.</p>
-        <button class="mt-4 w-full bg-blue-500 text-white font-bold py-2 rounded-lg">Konfirmasi Pembayaran</button>
-    </div>
-
-    <div class="bg-white p-4 shadow-md rounded-lg mb-16">
-        <p class="text-gray-700">Apabila anda kesulitan dan mengalami masalah, silahkan untuk menghubungi No. Whatsapp pada tombol di bawah ini sekarang juga.</p>
-        <button class="mt-4 w-full bg-green-500 text-white font-bold py-2 rounded-lg">Konsultasi Masalah</button>
-    </div>
+    <form action="#" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="mb-4">
+            <label class="block text-gray-700">Upload Bukti Pembayaran</label>
+            <input type="file" name="bukti_pembayaran" class="w-full px-3 py-2 border rounded-lg bg-gray-100">
+        </div>
+        <button type="submit" class="mt-4 w-full bg-blue-500 text-white font-bold py-2 rounded-lg mb-20">Upload Bukti</button>
+    </form>
 </div>
-
-<script>
-    function copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(() => {
-            alert('Teks telah disalin: ' + text);
-        }).catch(err => {
-            console.error('Gagal menyalin teks:', err);
-        });
-    }
-</script>
-
 @endsection

@@ -9,4 +9,13 @@ class AktifPaket extends Model
 {
     /** @use HasFactory<\Database\Factories\AktifPaketFactory> */
     use HasFactory;
+    protected $fillable = [
+        'status_paket',
+        'sisa_sesi',
+        'tanggal_aktif',
+        'tanggal_kadaluarsa',
+        'user_id',
+        'paket_id',
+        'pembayaran_id',
+    ];
 }
