@@ -52,4 +52,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function pakets()
+    {
+        return $this->hasMany(AktifPaket::class);
+    }
 }

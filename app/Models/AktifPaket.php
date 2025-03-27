@@ -18,4 +18,20 @@ class AktifPaket extends Model
         'paket_id',
         'pembayaran_id',
     ];
+
+    // Define the relationships
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function paket()
+    {
+        return $this->belongsTo(Paket::class);
+    }
+
+    public function pembayaran()
+    {
+        return $this->belongsTo(Pembayaran::class);
+    }
 }

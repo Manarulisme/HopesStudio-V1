@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('jenis_pelatihan',100);
             $table->integer('kuota');
             $table->timestamps();
+            $table->integer('peserta')->default(0);
+            $table->string('ruang', 50)->nullable();
         });
     }
 

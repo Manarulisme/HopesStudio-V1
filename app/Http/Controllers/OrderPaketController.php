@@ -22,10 +22,7 @@ class OrderPaketController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
@@ -61,7 +58,7 @@ class OrderPaketController extends Controller
             'pembayaran_id' => $pembayaran->id,
         ]);
 
-        return redirect()->route('show_pay_package', ['id' => $pembayaran->id]);
+        return redirect()->route('paket_user')->with('success', 'Paket berhasil dipesan.');
     }
 
     public function showPayPackagePage($id)
@@ -102,5 +99,4 @@ class OrderPaketController extends Controller
     {
         //
     }
-
 }

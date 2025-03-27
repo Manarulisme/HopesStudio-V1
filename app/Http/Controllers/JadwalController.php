@@ -109,7 +109,9 @@ class JadwalController extends Controller
 
     public function listSchedule()
     {
-        return view('UserPage.SchedulePage');
+        // Retrieve today's schedule from the jadwal table
+        $jadwals = Jadwal::whereDate('tanggal', now()->toDateString())->get();
+        return view('UserPage.SchedulePage', compact('jadwals'));
     }
 
     public function orderSchedule()
@@ -117,8 +119,18 @@ class JadwalController extends Controller
         return view('UserPage.OrderScedulePage');
     }
 
-    public function cariSchedule()
+    public function cariSchedule(Request $request)
     {
-        return view('UserPage.CariSchedulePage');
+         // Validate the input date
+    $request->validate([
+        'tanggal' => 'required|date',
+    ]);
+
+    // Retrieve jadwals based on the provided date
+    $carjadwals = Jadwal::whereDate('tanggal', $request->tanggal)->get();
+
+        return view('UserPage.CariSchedulePage', compact('carjadwals'));
     }
+
+
 }

@@ -41,6 +41,33 @@ class JadwalSeeder extends Seeder
                 'jenis_pelatihan' => 'Zumba',
                 'kuota' => 5,
             ],
+            [
+                'tanggal' => '2025-03-27',
+                'waktu_mulai' => '08:00:00',
+                'waktu_selesai' => '10:00:00',
+                'trainer' => 'Abdul Johnson',
+                'foto_ruangan' => 'Assets/Images/foto_ruangan/sample3.jpg',
+                'jenis_pelatihan' => 'Zumba',
+                'kuota' => 5,
+            ],
+            [
+                'tanggal' => '2025-03-27',
+                'waktu_mulai' => '10:00:00',
+                'waktu_selesai' => '12:00:00',
+                'trainer' => 'Alice Johnson',
+                'foto_ruangan' => 'Assets/Images/foto_ruangan/sample3.jpg',
+                'jenis_pelatihan' => 'Zumba',
+                'kuota' => 5,
+            ],
+            [
+                'tanggal' => '2025-03-27',
+                'waktu_mulai' => '14:00:00',
+                'waktu_selesai' => '16:00:00',
+                'trainer' => 'Alice Johnson',
+                'foto_ruangan' => 'Assets/Images/foto_ruangan/sample3.jpg',
+                'jenis_pelatihan' => 'Zumba',
+                'kuota' => 5,
+            ],
         ]);
     }
 }

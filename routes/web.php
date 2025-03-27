@@ -62,6 +62,7 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/cari-jadwal', [JadwalController::class, 'cariSchedule'])->name('cari_jadwal_user');
     Route::get('/detail-artikel', [ArtikelController::class, 'detailArtikel'])->name('detail_artikel_user');
     Route::get('/list-artikel', [ArtikelController::class, 'listArtikel'])->name('list_artikel_user');
+    Route::get('/jadwal/search', [JadwalController::class, 'cariSchedule'])->name('jadwal_search');
 });
 
 

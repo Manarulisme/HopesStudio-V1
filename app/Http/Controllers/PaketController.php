@@ -6,6 +6,7 @@ use App\Models\Paket;
 use App\Http\Requests\StorePaketRequest;
 use App\Http\Requests\UpdatePaketRequest;
 use Illuminate\Contracts\View\View;
+use App\Models\AktifPaket;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -15,7 +16,7 @@ class PaketController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() : View
+    public function index(): View
     {
 
         $pakets = Paket::all();
@@ -81,8 +82,15 @@ class PaketController extends Controller
     }
 
     public function aktifPaket()
-    {
-        return view('UserPage.ActivePackagePage');
+    {      // Get packages with status 'aktif' and 'pending'
+        $pakets = AktifPaket::where(function ($query) {
+            $query->where('status_paket', 'aktif')
+                ->orWhere('status_paket', 'pending');
+        })
+            ->where('sisa_sesi', '>', 0)
+            ->get();
+
+        return view('UserPage.ActivePackagePage', compact('pakets'));
     }
 
     public function orderPaket()

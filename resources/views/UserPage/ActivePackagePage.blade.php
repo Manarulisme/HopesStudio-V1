@@ -12,11 +12,17 @@
     <!-- Paket Aktif -->
     <div class="p-4">
         <h2 class="text-lg font-bold">Paket Aktif</h2>
-        <div class="relative w-full h-24 rounded-lg overflow-hidden mt-2">
-            <img src="{{ asset('Assets/Images/dashboard-popular.png') }}" alt="1 Sesi" class="w-full h-full object-cover opacity-90">
-            <span class="absolute top-4 left-4 text-white text-xl font-bold">1 Sesi</span>
-            <span class="absolute top-4 right-4 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">Complete</span>
-        </div>
+        @if($pakets && $pakets->count() > 0)
+            @foreach($pakets as $paket)
+                <div class="relative w-full h-24 rounded-lg overflow-hidden mt-2">
+                    <img src="{{ asset('Assets/Images/dashboard-popular.png') }}" alt="1 Sesi" class="w-full h-full object-cover opacity-90">
+                    <span class="absolute top-4 left-4 text-white text-xl font-bold">{{ $paket->paket->nama_paket }}</span>
+                    <span class="absolute top-4 right-4 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">{{ $paket->status_paket }}</span>
+                </div>
+            @endforeach
+        @else
+            <p class="text-gray-500">No active packages found.</p>
+        @endif
     </div>
 
     <!-- Jadwal Aktif -->
