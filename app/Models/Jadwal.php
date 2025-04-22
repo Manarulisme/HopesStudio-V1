@@ -16,6 +16,8 @@ class Jadwal extends Model
         'trainer',
         'foto_ruangan',
         'jenis_pelatihan',
-        'kuota'
+        'ruang',
+        'kuota',
+        'sesi'
     ];
 }

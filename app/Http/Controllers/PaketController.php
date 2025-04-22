@@ -7,6 +7,7 @@ use App\Http\Requests\StorePaketRequest;
 use App\Http\Requests\UpdatePaketRequest;
 use Illuminate\Contracts\View\View;
 use App\Models\AktifPaket;
+use App\Models\Pembayaran;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 

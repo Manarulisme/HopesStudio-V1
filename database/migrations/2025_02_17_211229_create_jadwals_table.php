@@ -20,9 +20,10 @@ return new class extends Migration
             $table->string('foto_ruangan',255);
             $table->string('jenis_pelatihan',100);
             $table->integer('kuota');
-            $table->timestamps();
             $table->integer('peserta')->default(0);
             $table->string('ruang', 50)->nullable();
+            $table->string('sesi', 50)->nullable();
+            $table->timestamps();
         });
     }
 

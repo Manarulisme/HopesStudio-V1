@@ -15,5 +15,15 @@ class Artikel extends Model
         'konten',
         'gambar_utama',
         'user_id',
+        'type'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }

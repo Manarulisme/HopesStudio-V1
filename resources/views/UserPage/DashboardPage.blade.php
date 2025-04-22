@@ -10,11 +10,6 @@
             <img src="{{ asset('Assets/Images/logo.png') }}" alt="Logo" class="w-8 h-8 rounded-full">
             <h1 class="text-lg font-bold">Hopes Studio</h1>
         </div>
-        <button>
-            <a href="{{ route('konfirmasi_pembayaran_user') }}">
-                <img src="{{ asset('Assets/Images/icons/confirm_button.svg') }}" class="h-6 w-6 text-blue-500" alt="Confirm Button">
-            </a>
-        </button>
     </div>
 
     <div class="p-4">

@@ -18,6 +18,18 @@
                     <img src="{{ asset('Assets/Images/dashboard-popular.png') }}" alt="1 Sesi" class="w-full h-full object-cover opacity-90">
                     <span class="absolute top-4 left-4 text-white text-xl font-bold">{{ $paket->paket->nama_paket }}</span>
                     <span class="absolute top-4 right-4 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">{{ $paket->status_paket }}</span>
+
+                        @if($paket->status_paket === 'pending' && is_null($paket->pembayaran->bukti_pembayaran))
+                        <a href="{{ route('konfirmasi_pembayaran_user', ['id' => $paket->pembayaran_id]) }}" class="absolute bottom-4 right-4 bg-green-500 text-white text-xs px-3 py-1 rounded-full">
+                            Konfirmasi Pembayaran
+                        </a>
+                        @elseif($paket->status_paket === 'pending' && !empty($paket->pembayaran->bukti_pembayaran))
+                        <span class="absolute bottom-4 right-4 bg-yellow-500 text-white text-xs px-3 py-1 rounded-full">
+                            <span class="text-black">Menunggu Persetujuan</span>
+                        </span>
+                        @endif
+
+
                 </div>
             @endforeach
         @else

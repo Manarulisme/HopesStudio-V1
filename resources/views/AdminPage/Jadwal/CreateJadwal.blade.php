@@ -84,6 +84,19 @@
             text-danger">{{ $message }}</span>
         @enderror
     </div>
+
+    <div class="form-group
+    @error('ruang')
+        has-error
+    @enderror">
+        <label for="ruang">Ruangan</label>
+        <input type="text" name="ruang" class="form-control" value="{{ old('ruang') }}">
+        @error('ruang')
+            <span class="help-block
+            text-danger">{{ $message }}</span>
+        @enderror
+    </div>
+
     <div class="form-group
     @error('kuota')
         has-error

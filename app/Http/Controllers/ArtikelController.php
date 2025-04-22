@@ -52,6 +52,7 @@ class ArtikelController extends Controller
             'gambar_utama' => $path,
             'user_id' => Auth::id(),
             'slug' => Str::slug($request->judul),
+            'type' => $request->type,
         ]);
         return redirect()->route('artikel.index')->with('success', 'Artikel created successfully.');
     }
@@ -87,13 +88,21 @@ class ArtikelController extends Controller
         //
     }
 
-    public function detailartikel()
+    public function detailartikel($slug)
     {
-        return view('UserPage.DetailArtikelPage');
+        // Retrieve the article by its slug
+        $artikel = Artikel::where('slug', $slug)->firstOrFail();
+        $headline = Artikel::where('slug', $slug)->firstOrFail();
+        //show artikel berdasarkan kolom slug dan type=headline
+
+        return view('UserPage.DetailArtikelPage', compact('artikel', 'headline'));
     }
 
     public function listArtikel()
     {
-        return view('UserPage.ListArtikelPage');
+        //list Artikel
+        $headlines = Artikel::where('type', 'headline')->get();
+        $artikels = Artikel::all();
+        return view('UserPage.ListArtikelPage', compact('artikels', 'headlines'));
     }
 }

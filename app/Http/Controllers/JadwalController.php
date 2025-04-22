@@ -43,6 +43,7 @@ class JadwalController extends Controller
             'trainer' => 'required|string|max:255',
             'jenis_pelatihan' => 'required|string',
             'kuota' => 'required|integer',
+            'ruang' => 'required|string|max:255'
         ]);
 
         if ($request->hasFile('foto_ruangan')) {
@@ -60,6 +61,7 @@ class JadwalController extends Controller
             'foto_ruangan' => $path,
             'jenis_pelatihan' => $request->jenis_pelatihan,
             'kuota' => $request->kuota,
+            'ruang' => $request->ruang
         ]);
 
 
@@ -131,6 +133,16 @@ class JadwalController extends Controller
 
         return view('UserPage.CariSchedulePage', compact('carjadwals'));
     }
+
+    public function showSchedule($id)
+    {
+        // Find the schedule by ID
+        $jadwals = Jadwal::findOrFail($id);
+
+        // Return the view with the schedule data
+        return view('UserPage.OrderScedulePage', compact('jadwals'));
+    }
+
 
 
 }

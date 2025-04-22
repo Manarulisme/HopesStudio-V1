@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pembayaran;
 use App\Http\Requests\StorePembayaranRequest;
 use App\Http\Requests\UpdatePembayaranRequest;
+use Illuminate\Http\Request;
 
 class PembayaranController extends Controller
 {
@@ -78,9 +79,36 @@ class PembayaranController extends Controller
         //
     }
 
-    public function konfirmasiPembayaran()
+    public function konfirmasiPembayaran($id)
     {
-        return view('UserPage.ConfirmPayPage');
+        $pembayaran = Pembayaran::findOrFail($id);
+        return view('UserPage.ConfirmPayPage', ['pembayaran' => $pembayaran]);
+    }
+
+    public function sendKonfirmasiPembayaran(Request $request)
+    {
+        // Validate the request data
+        $request->validate([
+            'kode_pembayaran' => 'required|string|max:255',
+            'nama_pengirim' => 'required|string|max:255',
+            'bukti_pembayaran' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'tanggal_pembayaran' => 'required|date',
+        ]);
+
+        // Upload the payment proof to local storage
+        $path = $request->file('bukti_pembayaran')->store('Assets/Images/bukti_pembayaran', 'public');
+
+        // Create or update the payment record in the Pembayarans table
+        $pembayaran = Pembayaran::updateOrCreate(
+            ['kode_pembayaran' => $request->kode_pembayaran], // Match by kode_pembayaran
+            [
+            'nama_pengirim' => $request->nama_pengirim,
+            'bukti_pembayaran' => $path,
+            'tanggal_pembayaran' => $request->tanggal_pembayaran,
+            ]
+        );
+
+        return redirect()->route('paket_user')->with('success', 'Payment confirmation sent successfully.');
     }
 
     public function bayarPaket()

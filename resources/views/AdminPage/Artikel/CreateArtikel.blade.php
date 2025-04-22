@@ -40,6 +40,18 @@
                             @enderror
                         </div>
 
+                        <div class="form-group @error('type') has-error @enderror">
+                            <label for="type">Type Artikel</label>
+                            <select name="type" class="form-control">
+                                <option value="headline" {{ old('type') == 'headline' ? 'selected' : '' }}>Headline</option>
+                                <option value="normal" {{ old('type') == 'normal' ? 'selected' : '' }}>Normal</option>
+                            </select>
+                            @error('type')
+                                <span class="help-block text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+
                         <button type="submit" class="btn btn-success">Simpan</button>
                     </form>
                 </div>

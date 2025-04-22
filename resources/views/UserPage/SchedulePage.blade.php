@@ -24,7 +24,7 @@
             <p>Pelatih : {{ $jadwal->trainer }}</p>
             <p class="text-blue-500">Kuota {{ $jadwal->kuota }}</p>
             @if ($jadwal->kuota > 0)
-            <button class="w-full bg-blue-500 text-white font-bold py-2 rounded-lg">Booking Sekarang</button>
+            <a href="{{ route('show_jadwal_user', ['id' => $jadwal->id]) }}" class="w-full bg-blue-500 text-white font-bold py-2 rounded-lg text-center block">Booking Sekarang</a>
             @else
             <button class="w-full bg-gray-400 text-white font-bold py-2 rounded-lg cursor-not-allowed">Booking Penuh</button>
             @endif

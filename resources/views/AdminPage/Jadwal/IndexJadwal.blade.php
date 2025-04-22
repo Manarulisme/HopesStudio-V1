@@ -9,44 +9,50 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h2>Jadwal</h2>
-                    <a href="{{ route('jadwal.create') }}" class="btn btn-primary my-3">
-                        <button>Tambah Jadwal</button>
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">Jadwal</h2>
+                    <a href="{{ route('jadwal.create') }}" class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-4">
+                        Tambah Jadwal
                     </a>
 
-                    <table class="table table-bordered">
-                        {{-- buat judul yang terdiri dari tanggal, waktu mulai, waktu selesai trainer, action --}}
-                        <tr>
-                            <th>No</th>
-                            <th>Tanggal</th>
-                            <th>Waktu Mulai</th>
-                            <th>Waktu Selesai</th>
-                            <th>Trainer</th>
-                            <th>Foto Ruangan</th>
-                            <th>Action</th>
-                        </tr>
-                        {{-- buat perulangan untuk menampilkan data jadwal --}}
-                        @foreach ($jadwals as $jadwal)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $jadwal->tanggal }}</td>
-                            <td>{{ $jadwal->waktu_mulai }}</td>
-                            <td>{{ $jadwal->waktu_selesai }}</td>
-                            <td>{{ $jadwal->trainer }}</td>
-                            {{-- tampilkan foto yang telah di upload --}}
-                            <td><img src="{{ asset('storage/' . $jadwal->foto_ruangan) }}" alt="Foto Ruangan" width="100" height="100"></td>
-                            {{-- buat button edit dan delete --}}
-                            <td>
-                                <a href="{{ route('jadwal.edit', $jadwal->id) }}" class="btn btn-warning">Edit</a>
-                                <form action="{{ route('jadwal.destroy', $jadwal->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this schedule?');">
-                                    @csrf
-                                    @method('delete')
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </table>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-200 rounded-lg shadow-md">
+                            <thead class="bg-gray-100 dark:bg-gray-700">
+                                <tr>
+                                    <th class="px-4 py-2 border-b text-left text-sm font-medium text-gray-600 dark:text-gray-300">No</th>
+                                    <th class="px-4 py-2 border-b text-left text-sm font-medium text-gray-600 dark:text-gray-300">Tanggal</th>
+                                    <th class="px-4 py-2 border-b text-left text-sm font-medium text-gray-600 dark:text-gray-300">Waktu Mulai</th>
+                                    <th class="px-4 py-2 border-b text-left text-sm font-medium text-gray-600 dark:text-gray-300">Waktu Selesai</th>
+                                    <th class="px-4 py-2 border-b text-left text-sm font-medium text-gray-600 dark:text-gray-300">Trainer</th>
+                                    <th class="px-4 py-2 border-b text-left text-sm font-medium text-gray-600 dark:text-gray-300">Foto Ruangan</th>
+                                    <th class="px-4 py-2 border-b text-left text-sm font-medium text-gray-600 dark:text-gray-300">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($jadwals as $jadwal)
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300">{{ $loop->iteration }}</td>
+                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300">{{ $jadwal->tanggal }}</td>
+                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300">{{ $jadwal->waktu_mulai }}</td>
+                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300">{{ $jadwal->waktu_selesai }}</td>
+                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300">{{ $jadwal->trainer }}</td>
+                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300">
+                                        <a href="{{ asset('storage/' . $jadwal->foto_ruangan) }}" target="_blank">
+                                            <img src="{{ asset('storage/' . $jadwal->foto_ruangan) }}" alt="Foto Ruangan" class="w-24 h-24 object-cover rounded hover:cursor-pointer">
+                                        </a>
+                                    </td>
+                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300">
+                                        <a href="{{ route('jadwal.edit', $jadwal->id) }}" class="inline-block bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 mr-2">Edit</a>
+                                        <form action="{{ route('jadwal.destroy', $jadwal->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this schedule?');">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
             </div>

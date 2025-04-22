@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('gambar_utama');
             $table->text('konten');
             $table->string('slug', 255)->nullable();
+            $table->enum('type', ['headline', 'normal'])->default('normal'); // Add enum column
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });

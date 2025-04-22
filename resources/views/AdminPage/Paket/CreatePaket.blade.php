@@ -10,7 +10,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h2>Paket</h2>
-                    <a href="{{ route('paket.index')) }}" class="btn btn-primary my-3">
+                    <a href="{{ route('paket.index') }}" class="btn btn-primary my-3">
                         <button>Kembali</button>
                         </a>
                     <form action="{{ route('paket.store') }}" method="POST">

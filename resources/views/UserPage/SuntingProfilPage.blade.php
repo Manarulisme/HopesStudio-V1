@@ -13,16 +13,19 @@
         <h1 class="text-lg font-bold ml-2">Sunting Profil</h1>
     </div>
 
-    <div class="flex flex-col items-center mb-4">
-        <img src="{{ auth()->user()->foto_profil ? asset('storage/' . auth()->user()->foto_profil) : asset('default-profile.png') }}" alt="Profile" class="w-24 h-24 rounded-full border">
-        <label for="foto_profil" class="text-sm text-gray-600 mt-2 cursor-pointer">Ubah foto</label>
-        <input type="file" id="foto_profil" name="foto_profil" class="hidden" onchange="document.getElementById('file-chosen').textContent = this.files[0].name">
-        <span id="file-chosen" class="text-sm text-gray-600 mt-2"></span>
-    </div>
+
 
     <form action="{{ route('profil-user.update', auth()->user()->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
+
+        <div class="flex flex-col items-center mb-4">
+            <img src="{{ auth()->user()->foto_profil ? asset('storage/' . auth()->user()->foto_profil) : asset('default-profile.png') }}" alt="Profile" class="w-24 h-24 rounded-full border">
+            <label for="foto_profil" class="text-sm text-gray-600 mt-2 cursor-pointer">Ubah foto</label>
+            <input type="file" id="foto_profil" name="foto_profil" class="hidden" onchange="if(this.files.length > 0) document.getElementById('file-chosen').textContent = this.files[0].name">
+            <span id="file-chosen" class="text-sm text-gray-600 mt-2"></span>
+        </div>
+
         <div class="mb-3">
             <label class="block text-gray-700">Nama Lengkap</label>
             <input type="text" name="name" value="{{ auth()->user()->name }}" placeholder="Masukkan Nama Lengkap.." class="w-full px-3 py-2 border rounded-lg bg-gray-100">

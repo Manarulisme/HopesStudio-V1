@@ -53,14 +53,16 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/pay-package/{id}', [OrderPaketController::class, 'showPayPackagePage'])->name('show_pay_package');
     Route::resource('profil-user', UserProfilController::class);
     Route::get('/paket-user', [PaketController::class, 'aktifPaket'])->name('paket_user');
-    Route::get('/konfirmasi-pembayaran', [PembayaranController::class, 'konfirmasiPembayaran'])->name('konfirmasi_pembayaran_user');
+    Route::get('/pembayaran-user/{id}', [PembayaranController::class, 'konfirmasiPembayaran'])->name('konfirmasi_pembayaran_user');
+    Route::match(['post', 'patch'], '/pembayaran-user', [PembayaranController::class, 'sendKonfirmasiPembayaran'])->name('sendKonfirmasiPembayaran');
     Route::get('/pembayaran-user', [PembayaranController::class, 'bayarPaket'])->name('pembayaran_user');
     Route::get('/sunting-profil', [UserController::class, 'SuntingProfil'])->name('sunting_profil_user');
     Route::get('/order-schedule', [JadwalController::class, 'orderSchedule'])->name('order_schedule_user');
     Route::get('/order-paket', [PaketController::class, 'orderPaket'])->name('order_paket_user');
     Route::get('/jadwal-user', [JadwalController::class, 'listSchedule'])->name('jadwal_user');
     Route::get('/cari-jadwal', [JadwalController::class, 'cariSchedule'])->name('cari_jadwal_user');
-    Route::get('/detail-artikel', [ArtikelController::class, 'detailArtikel'])->name('detail_artikel_user');
+    Route::get('/show-jadwal-user/{id}', [JadwalController::class, 'showSchedule'])->name('show_jadwal_user');
+    Route::get('/detail-artikel/{slug}', [ArtikelController::class, 'detailArtikel'])->name('detail_artikel_user');
     Route::get('/list-artikel', [ArtikelController::class, 'listArtikel'])->name('list_artikel_user');
     Route::get('/jadwal/search', [JadwalController::class, 'cariSchedule'])->name('jadwal_search');
 });
@@ -69,9 +71,9 @@ Route::middleware(['auth', 'role:user'])->group(function () {
 // Define a common dashboard route that redirects based on user role
 Route::get('/dashboard', function () {
     $user = Auth::user();
-    if ($user->role === 'admin') {
+    if ($user && $user->role === 'admin') {
         return redirect()->route('dashboard_admin');
-    } elseif ($user->role === 'user') {
+    } elseif ($user && $user->role === 'user') {
         return redirect()->route('dashboard_user');
     }
     return redirect('/');
@@ -80,8 +82,8 @@ Route::get('/dashboard', function () {
 require __DIR__.'/auth.php';
 
 Route::get('/check-timezone', function () {
-    return [
+    return response()->json([
         'timezone' => config('app.timezone'),
         'current_time' => now()->toDateTimeString(),
-    ];
+    ]);
 });

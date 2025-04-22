@@ -7,7 +7,7 @@
     <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md relative text-center">
         <div class="bg-blue-500 h-24 rounded-t-lg"></div>
         <div class="-mt-12">
-            <img src="{{ asset('path/to/profile/pictures/' . Auth::user()->profile_picture) }}" alt="Profile Picture" class="w-24 h-24 rounded-full mx-auto border-4 border-white">
+            <img src="{{ asset('path/to/profile/pictures/' . Auth::user()->foto_profil) }}" alt="Profile Picture" class="w-24 h-24 rounded-full mx-auto border-4 border-white">
         </div>
         <div class="bg-gray-200 p-4 rounded-lg mt-4 text-left">
             <p><strong>Nama Lengkap:</strong> {{ Auth::user()->name }}</p>
