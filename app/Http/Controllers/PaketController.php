@@ -63,23 +63,50 @@ class PaketController extends Controller
      */
     public function edit(Paket $paket)
     {
-        //
+        return view('AdminPage.Paket.EditPaket', compact('paket'));
     }
 
     /**
      * Update the specified resource in storage.
      */
+
     public function update(UpdatePaketRequest $request, Paket $paket)
     {
-        //
-    }
+        // Check if the user is authorized to update the paket
+        $this->authorize('update', $paket);
 
+        // Validate the request
+        $validatedData = $request->validated();
+
+        // Update the paket
+        $paket->update($validatedData);
+
+        // Redirect to index paket with success message
+        return redirect()->route('paket.index')->with('success', 'Paket updated successfully.');
+    }
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Paket $paket)
+    public function destroy($id)
     {
-        //
+        $paket = Paket::findOrFail($id);
+
+        // Check if the user is authorized to delete the paket
+        $this->authorize('delete', $paket);
+
+        // Check if the paket is associated with any active packages
+        $activePaket = AktifPaket::where('paket_id', $paket->id)->first();
+        if ($activePaket) {
+            $pembayaran = Pembayaran::where('aktif_paket_id', $activePaket->id)->first();
+            if ($pembayaran) {
+                return redirect()->route('paket.index')->with('error', 'Cannot delete this package as it is associated with an active package that has payments.');
+            }
+        }
+
+        // Delete the paket
+        $paket->delete();
+
+        return redirect()->route('paket.index')->with('success', 'Paket deleted successfully.');
     }
 
     public function aktifPaket()

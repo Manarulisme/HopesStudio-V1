@@ -20,18 +20,19 @@
         <h2 class="text-2xl font-bold text-center">Register</h2>
         <p class="text-center text-gray-600 mb-4">Silahkan isi informasi diri</p>
 
-        <form>
+        <form action="{{ route('register_user_post') }}" method="POST">
+            @csrf
             <label class="block mb-2 font-semibold">Username</label>
-            <input type="text" placeholder="Masukkan Username.." class="w-full p-3 border rounded-lg mb-4 bg-gray-100">
+            <input type="text" placeholder="Masukkan Username.." class="w-full p-3 border rounded-lg mb-4 bg-gray-100" name="name">
 
             <label class="block mb-2 font-semibold">Email</label>
-            <input type="email" placeholder="Masukkan Email.." class="w-full p-3 border rounded-lg mb-4 bg-gray-100">
+            <input type="email" placeholder="Masukkan Email.." class="w-full p-3 border rounded-lg mb-4 bg-gray-100" name="email">
 
             <label class="block mb-2 font-semibold">No. Whatsapp</label>
-            <input type="text" placeholder="Masukkan No. Whatsapp.." class="w-full p-3 border rounded-lg mb-4 bg-gray-100">
+            <input type="text" placeholder="Masukkan No. Whatsapp.." class="w-full p-3 border rounded-lg mb-4 bg-gray-100" name="no_telepon">
 
             <label class="block mb-2 font-semibold">Password</label>
-            <input type="password" placeholder="Password.." class="w-full p-3 border rounded-lg mb-4 bg-gray-100">
+            <input type="password" placeholder="Password.." class="w-full p-3 border rounded-lg mb-4 bg-gray-100" name="password">
 
             <button class="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700">Register</button>
         </form>

@@ -36,7 +36,7 @@
                                         <a href="{{ route('paket.edit', $paket->id) }}" class="inline-block bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 mr-2">
                                             Edit
                                         </a>
-                                        <form action="{{ route('paket.destroy', $paket->id) }}" method="POST" class="inline-block">
+                                        <form action="{{ route('paket.destroy', $paket->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this paket?');">
                                             @csrf
                                             @method('delete')
                                             <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">

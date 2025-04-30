@@ -20,6 +20,7 @@ Route::get('/login-user', [BerandaController::class, 'login'])->name('login_user
 Route::post('/login-user', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/register-user', [BerandaController::class, 'register'])->name('register_user');
+Route::post('/register-user', [BerandaController::class, 'postRegister'])->name('register_user_post');
 Route::get('/forgot-user', [BerandaController::class, 'forgot'])->name('forgot_user');
 Route::get('/send-otp', [BerandaController::class, 'sendOTP'])->name('send_otp_user');
 Route::get('/reset-password-user', [BerandaController::class, 'ResetPassword'])->name('reset_password_user');

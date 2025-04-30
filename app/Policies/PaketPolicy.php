@@ -28,4 +28,16 @@ class PaketPolicy
         // Define your authorization logic here
         return $user->role === 'admin';
     }
+
+    public function delete(User $user, Paket $paket)
+{
+    // Allow admins or the owner of the package to delete it
+    return $user->role === 'admin' || $user->id === $paket->user_id;
+}
+
+public function update(User $user, Paket $paket)
+{
+    return $user->role === 'admin';
+}
+
 }

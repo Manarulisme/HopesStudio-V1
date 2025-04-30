@@ -82,7 +82,7 @@ class JadwalController extends Controller
      */
     public function edit(Jadwal $jadwal)
     {
-        //
+        return view('AdminPage.Jadwal.EditJadwal', compact('jadwal'));
     }
 
     /**
