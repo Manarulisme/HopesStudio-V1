@@ -57,4 +57,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(AktifPaket::class);
     }
+
+        // Relasi ke AktifPaket
+    public function aktifPakets()
+    {
+        return $this->hasMany(AktifPaket::class);
+    }
 }

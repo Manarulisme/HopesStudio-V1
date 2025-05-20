@@ -16,11 +16,11 @@ return new class extends Migration
             $table->enum('status_paket', ['aktif', 'pending', 'nonaktif'])->default('pending');
             $table->integer('sisa_sesi');
             $table->dateTime('tanggal_aktif');
-            $table->dateTime('tanggal_kadaluarsa');
+            $table->dateTime('tanggal_kadaluarsa')->nullable();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('paket_id')->constrained('pakets')->onDelete('cascade');
             $table->foreignId('pembayaran_id')->constrained('pembayarans')->onDelete('cascade');
-
+             $table->foreignId('aktif_paket_id')->nullable()->after('jadwal_id')->constrained('aktif_pakets')->onDelete('cascade');
             $table->timestamps();
         });
     }

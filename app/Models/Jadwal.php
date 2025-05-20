@@ -20,4 +20,10 @@ class Jadwal extends Model
         'kuota',
         'sesi'
     ];
+
+        // Relasi dengan BookJadwal
+    public function bookJadwals()
+    {
+        return $this->hasMany(BookJadwal::class, 'jadwal_id', 'id');
+    }
 }

@@ -8,6 +8,18 @@ use App\Http\Requests\UpdatePaketRequest;
 use Illuminate\Contracts\View\View;
 use App\Models\AktifPaket;
 use App\Models\Pembayaran;
+use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -70,18 +82,25 @@ class PaketController extends Controller
      * Update the specified resource in storage.
      */
 
-    public function update(UpdatePaketRequest $request, Paket $paket)
+    public function update(Request $request, $id): RedirectResponse
     {
+        $paket = Paket::findOrFail($id);
+
         // Check if the user is authorized to update the paket
         $this->authorize('update', $paket);
 
-        // Validate the request
-        $validatedData = $request->validated();
+        // Validate the request data
+        $request->validate([
+            'nama_paket' => 'required|string|max:255',
+            'harga' => 'required|numeric',
+            'jumlah_sesi' => 'required|integer',
+            'masa_aktif_hari' => 'required|integer',
+            'deskripsi' => 'nullable|string',
+        ]);
 
         // Update the paket
-        $paket->update($validatedData);
+        $paket->update($request->all());
 
-        // Redirect to index paket with success message
         return redirect()->route('paket.index')->with('success', 'Paket updated successfully.');
     }
     /**
@@ -110,11 +129,16 @@ class PaketController extends Controller
     }
 
     public function aktifPaket()
-    {      // Get packages with status 'aktif' and 'pending'
+    {
+        // Get the authenticated user's ID
+        $userId = auth()->id();
+
+        // Get packages with status 'aktif' and 'pending' that match the authenticated user's ID
         $pakets = AktifPaket::where(function ($query) {
             $query->where('status_paket', 'aktif')
                 ->orWhere('status_paket', 'pending');
         })
+            ->where('user_id', $userId)
             ->where('sisa_sesi', '>', 0)
             ->get();
 

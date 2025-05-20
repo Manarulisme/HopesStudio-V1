@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateJadwalRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class JadwalController extends Controller
 {
@@ -43,7 +44,8 @@ class JadwalController extends Controller
             'trainer' => 'required|string|max:255',
             'jenis_pelatihan' => 'required|string',
             'kuota' => 'required|integer',
-            'ruang' => 'required|string|max:255'
+            'ruang' => 'required|string|max:255',
+            'sesi' => 'required|string|max:255'
         ]);
 
         if ($request->hasFile('foto_ruangan')) {
@@ -61,7 +63,8 @@ class JadwalController extends Controller
             'foto_ruangan' => $path,
             'jenis_pelatihan' => $request->jenis_pelatihan,
             'kuota' => $request->kuota,
-            'ruang' => $request->ruang
+            'ruang' => $request->ruang,
+            'sesi' => $request->sesi,
         ]);
 
 
@@ -111,10 +114,34 @@ class JadwalController extends Controller
 
     public function listSchedule()
     {
-        // Retrieve today's schedule from the jadwal table
-        $jadwals = Jadwal::whereDate('tanggal', now()->toDateString())->get();
-        return view('UserPage.SchedulePage', compact('jadwals'));
+      // Ambil jadwal hari ini
+    $jadwals = Jadwal::whereDate('tanggal', now()->toDateString())->get();
+
+    // Cek jika user sudah melakukan booking untuk setiap jadwal
+    foreach ($jadwals as $jadwal) {
+        $jadwal->isBooked = $jadwal->bookJadwals()->where('user_id', Auth::id())->exists();
     }
+
+    // Kirim data jadwals ke view
+    return view('UserPage.SchedulePage', compact('jadwals'));
+    }
+
+public function searchSchedule(Request $request)
+{
+    $request->validate([
+        'tanggal' => 'required|date',
+    ]);
+
+    $tanggal = $request->input('tanggal');
+
+    $jadwals = Jadwal::whereDate('tanggal', $tanggal)->get();
+
+    foreach ($jadwals as $jadwal) {
+        $jadwal->isBooked = $jadwal->bookJadwals()->where('user_id', Auth::id())->exists();
+    }
+
+    return view('UserPage.SchedulePage', compact('jadwals'));
+}
 
     public function orderSchedule()
     {

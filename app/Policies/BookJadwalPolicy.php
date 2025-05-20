@@ -13,7 +13,7 @@ class BookJadwalPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -33,11 +33,23 @@ class BookJadwalPolicy
     }
 
     /**
+     * Determine whether the user can store a newly created model.
+     */
+    public function store(User $user): Response
+    {
+        return $user->role === 'user'
+            ? Response::allow()
+            : Response::deny('You must be a user to book a schedule.');
+    }
+
+    /**
      * Determine whether the user can update the model.
      */
     public function update(User $user, BookJadwal $bookJadwal): bool
     {
-        return false;
+        return $user->role === 'user'
+            ? Response::allow()
+            : Response::deny('You must be a user to book a schedule.');
     }
 
     /**

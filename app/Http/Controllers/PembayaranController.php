@@ -14,10 +14,12 @@ class PembayaranController extends Controller
      */
     public function index()
     {
-        //list Konfiramsi Pembayaran
-        $pembayarans = Pembayaran::all();
+        //list Konfiramsi Pembayaran berdasarkan status_pembayaran 'pending'
+        //baca variabel pembayaran
+        $pembayarans = Pembayaran::where('status_pembayaran', 'pending')->get();
         return view('AdminPage.Konfirmasi.IndexKonfirmasi', compact('pembayarans'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -66,9 +68,23 @@ class PembayaranController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePembayaranRequest $request, Pembayaran $pembayaran)
+    public function approve($id)
     {
-        //
+        $pembayaran = Pembayaran::findOrFail($id);
+
+        // Check permission using policy
+        if (!auth()->user()->can('update', $pembayaran)) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Update payment status in pembayarans table
+        $pembayaran->status_pembayaran = 'approved';
+        $pembayaran->save();
+
+        // Update status_paket in aktif_pakets table using Eloquent relationship
+        $pembayaran->aktifPaket()->update(['status_paket' => 'aktif']);
+
+        return redirect()->back()->with('success', 'Status pembayaran dan paket berhasil diperbarui.');
     }
 
     /**
@@ -76,7 +92,13 @@ class PembayaranController extends Controller
      */
     public function destroy(Pembayaran $pembayaran)
     {
-        //
+        // Hapus data di tabel aktif_pakets yang terkait dengan pembayaran ini
+        $pembayaran->aktifPaket()->delete();
+
+        // Hapus data di tabel pembayarans
+        $pembayaran->delete();
+
+        return redirect()->route('pembayaran.index')->with('success', 'Pembayaran dan data terkait berhasil dihapus.');
     }
 
     public function konfirmasiPembayaran($id)

@@ -34,4 +34,9 @@ class AktifPaket extends Model
     {
         return $this->belongsTo(Pembayaran::class);
     }
+
+    public function bookJadwals()
+{
+    return $this->hasMany(BookJadwal::class);
+}
 }

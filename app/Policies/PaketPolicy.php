@@ -36,8 +36,8 @@ class PaketPolicy
 }
 
 public function update(User $user, Paket $paket)
-{
-    return $user->role === 'admin';
+{   // Allow admins or the owner of the package to update it
+    return $user->role === 'admin' || $user->id === $paket->user_id;
 }
 
-}
+    }

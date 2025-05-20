@@ -37,7 +37,8 @@ class PembayaranPolicy
      */
     public function update(User $user, Pembayaran $pembayaran): bool
     {
-        return false;
+           // Hanya admin yang diizinkan untuk mengupdate status pembayaran
+           return $user->role === 'admin';
     }
 
     /**

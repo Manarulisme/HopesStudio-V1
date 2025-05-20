@@ -27,4 +27,8 @@ class Pembayaran extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+    public function aktifPaket()
+{
+    return $this->hasOne(AktifPaket::class, 'pembayaran_id');
+}
 }

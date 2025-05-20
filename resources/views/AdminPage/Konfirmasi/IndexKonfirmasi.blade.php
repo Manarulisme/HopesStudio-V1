@@ -39,15 +39,22 @@
                                                 <img src="{{ asset('storage/' . $item->bukti_pembayaran) }}" alt="Bukti Pembayaran" class="w-24 h-auto rounded hover:cursor-pointer">
                                             </a>
                                         </td>
-                                        <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300 text-center">{{ $item->status }}</td>
+                                        <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300 text-center">{{ $item->status_pembayaran }}</td>
                                         <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300 text-center">
-                                            <a href="{{ route('pembayaran.edit', $item->id) }}" class="inline-block bg-green-500 text-white px-3 py-1 rounded hover:bg-yellow-600">
-                                                Konfirmasi
-                                            </a>
+                                            @if ($item->status_pembayaran !== 'approved')
+                                            @can('update', $item)
+                                            <form action="{{ route('pembayarans.approve', $item->id) }}" method="POST" class="inline-block">
+                                                @csrf
+                                                <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600" onclick="return confirm('Apakah Anda yakin akan mengonfirmasi data ini?')">
+                                                    Konfirmasi
+                                                </button>
+                                            </form>
+                                        @endcan
+                                            @endif
                                             <form action="{{ route('pembayaran.destroy', $item->id) }}" method="POST" class="inline-block">
                                                 @csrf
                                                 @method('delete')
-                                                <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" onclick="return confirm('Yakin ingin menghapus data ini?')">
+                                                <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" onclick="return confirm('Yakin ingin menolak data ini?')">
                                                     Tolak
                                                 </button>
                                             </form>

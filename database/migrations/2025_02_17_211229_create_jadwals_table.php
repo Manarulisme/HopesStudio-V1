@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('peserta')->default(0);
             $table->string('ruang', 50)->nullable();
             $table->string('sesi', 50)->nullable();
+            $table->enum('status', ['aktif', 'nonaktif'])->default('aktif')->after('sesi');
             $table->timestamps();
         });
     }

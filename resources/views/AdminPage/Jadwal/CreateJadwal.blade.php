@@ -75,6 +75,14 @@
                         </div>
 
                         <div class="space-y-2">
+                            <label for="sesi" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sesi</label>
+                            <input type="text" name="sesi" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="{{ old('sesi') }}">
+                            @error('sesi')
+                                <span class="text-sm text-red-500">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="space-y-2">
                             <label for="kuota" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Kuota</label>
                             <input type="number" name="kuota" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="{{ old('kuota') }}">
                             @error('kuota')

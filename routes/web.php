@@ -11,6 +11,8 @@ use App\Http\Controllers\PaketController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserProfilController;
+use App\Http\Controllers\BookJadwalController;
+use App\Http\Controllers\CarouselImagesController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -39,10 +41,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('/admin/pembayaran', PembayaranController::class);
     // Route Resource Artikel
     Route::resource('/admin/artikel', ArtikelController::class);
+
+    // Route::post('/admin/artikel/update/{id}', [ArtikelController::class, 'update'])->name('artikel.update');
     // Route Resource User
     Route::resource('/admin/user', UserController::class);
     // Route Resource Admin
     Route::resource('/admin/admin', ProfileController::class);
+    Route::post('/pembayarans/{id}/approve', [PembayaranController::class, 'approve'])->name('pembayarans.approve');
+    Route::get('/admin/carousel_images/create', [CarouselImagesController::class, 'create'])->name('create_carousel_images');
+    Route::post('/admin/carousel_images', [CarouselImagesController::class, 'store'])->name('store_carousel_images');
+    Route::get('/admin/carousel_images', [CarouselImagesController::class, 'index'])->name('index_carousel_images');
 
 });
 
@@ -60,13 +68,18 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/sunting-profil', [UserController::class, 'SuntingProfil'])->name('sunting_profil_user');
     Route::get('/order-schedule', [JadwalController::class, 'orderSchedule'])->name('order_schedule_user');
     Route::get('/order-paket', [PaketController::class, 'orderPaket'])->name('order_paket_user');
+    Route::resource('/booking-jadwal', BookJadwalController::class);
+    Route::post('/booking-jadwal', [BookJadwalController::class, 'bookingJadwal'])->name('booking_jadwal_user');
     Route::get('/jadwal-user', [JadwalController::class, 'listSchedule'])->name('jadwal_user');
-    Route::get('/cari-jadwal', [JadwalController::class, 'cariSchedule'])->name('cari_jadwal_user');
+    Route::get('/jadwal-user/cari', [JadwalController::class, 'searchSchedule'])->name('jadwal_search');
     Route::get('/show-jadwal-user/{id}', [JadwalController::class, 'showSchedule'])->name('show_jadwal_user');
     Route::get('/detail-artikel/{slug}', [ArtikelController::class, 'detailArtikel'])->name('detail_artikel_user');
     Route::get('/list-artikel', [ArtikelController::class, 'listArtikel'])->name('list_artikel_user');
-    Route::get('/jadwal/search', [JadwalController::class, 'cariSchedule'])->name('jadwal_search');
+
+    // Add this route if it doesn't exist
+
 });
+
 
 
 // Define a common dashboard route that redirects based on user role
