@@ -13,8 +13,11 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserProfilController;
 use App\Http\Controllers\BookJadwalController;
 use App\Http\Controllers\CarouselImagesController;
+use App\Http\Controllers\KehadiranController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+
 
 // Public routes
 Route::get('/', [BerandaController::class, 'index'])->name('beranda_user');
@@ -51,6 +54,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/carousel_images/create', [CarouselImagesController::class, 'create'])->name('create_carousel_images');
     Route::post('/admin/carousel_images', [CarouselImagesController::class, 'store'])->name('store_carousel_images');
     Route::get('/admin/carousel_images', [CarouselImagesController::class, 'index'])->name('index_carousel_images');
+    Route::delete('admin/carousel_images/{id}', [CarouselImagesController::class, 'destroy'])->name('carousel_images.destroy');
+    Route::get('/admin/kehadiran_user', [KehadiranController::class, 'index'])->name('kehadiran_user');
+    Route::patch('admin/kehadiran_user/{id}/status', [KehadiranController::class, 'statusKehadiran'])->name('kehadiran.status');
+
+
 
 });
 
@@ -62,9 +70,9 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/pay-package/{id}', [OrderPaketController::class, 'showPayPackagePage'])->name('show_pay_package');
     Route::resource('profil-user', UserProfilController::class);
     Route::get('/paket-user', [PaketController::class, 'aktifPaket'])->name('paket_user');
-    Route::get('/pembayaran-user/{id}', [PembayaranController::class, 'konfirmasiPembayaran'])->name('konfirmasi_pembayaran_user');
+    Route::get('/konfirmasi-pembayaran-user/{id}', [PembayaranController::class, 'konfirmasiPembayaran'])->name('konfirmasi_pembayaran_user');
     Route::match(['post', 'patch'], '/pembayaran-user', [PembayaranController::class, 'sendKonfirmasiPembayaran'])->name('sendKonfirmasiPembayaran');
-    Route::get('/pembayaran-user', [PembayaranController::class, 'bayarPaket'])->name('pembayaran_user');
+    Route::get('/pembayaran-user/{id}', [PembayaranController::class, 'bayarPaket'])->name('pembayaran_user');
     Route::get('/sunting-profil', [UserController::class, 'SuntingProfil'])->name('sunting_profil_user');
     Route::get('/order-schedule', [JadwalController::class, 'orderSchedule'])->name('order_schedule_user');
     Route::get('/order-paket', [PaketController::class, 'orderPaket'])->name('order_paket_user');
@@ -80,7 +88,14 @@ Route::middleware(['auth', 'role:user'])->group(function () {
 
 });
 
-
+Route::get('/link-storage', function () {
+    try {
+        Artisan::call('storage:link');
+        return 'Storage link created successfully.';
+    } catch (\Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});
 
 // Define a common dashboard route that redirects based on user role
 Route::get('/dashboard', function () {

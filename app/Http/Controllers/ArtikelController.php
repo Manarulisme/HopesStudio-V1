@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
+
 class ArtikelController extends Controller
 {
     /**
@@ -20,7 +21,7 @@ class ArtikelController extends Controller
     public function index()
     {
         //list Artikel
-        $artikels = Artikel::all();
+        $artikels = Artikel::paginate(10);
         return view('AdminPage.Artikel.IndexArtikel', compact('artikels'));
     }
 
@@ -40,7 +41,7 @@ class ArtikelController extends Controller
         $request->validate([
             'judul' => 'required|string|max:255',
             'konten' => 'required|string',
-            'gambar_utama' => 'required|image|mimes:jpeg,jpg,png|max:2048',
+            'gambar_utama' => 'required|image|mimes:jpeg,jpg,png,webp|max:2048',
         ]);
 
         if ($request->hasFile('gambar_utama')) {
@@ -60,6 +61,7 @@ class ArtikelController extends Controller
         ]);
         return redirect()->route('artikel.index')->with('success', 'Artikel created successfully.');
     }
+
     /**
      * Display the specified resource.
      */
@@ -73,11 +75,9 @@ class ArtikelController extends Controller
      */
     public function edit(string $id)
     {
-
         // Ambil artikel berdasarkan ID
         $artikel = Artikel::findOrFail($id);
         // Tampilkan halaman edit dengan data artikel
-
 
         return view('AdminPage.Artikel.EditArtikel', compact('artikel'));
     }
@@ -90,9 +90,9 @@ class ArtikelController extends Controller
         $request->validate([
             'judul' => 'required|string|max:255',
             'konten' => 'required|string',
-            'gambar_utama' => 'nullable|image|mimes:jpeg,jpg,png,gif,svg|max:4000',
-
+            'gambar_utama' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp,svg|max:4000',
         ]);
+
         // Retrieve the article by its ID
         $artikel = Artikel::findOrFail($id);
 
@@ -132,8 +132,8 @@ class ArtikelController extends Controller
         $artikel = Artikel::findOrFail($id);
 
         // Hapus gambar utama dari storage jika ada
-        if ($artikel->gambar_utama && \Storage::exists('public/' . $artikel->gambar_utama)) {
-            \Storage::delete('public/' . $artikel->gambar_utama);
+        if ($artikel->gambar_utama && Storage::exists('public/' . $artikel->gambar_utama)) {
+            Storage::delete('public/' . $artikel->gambar_utama);
         }
 
         // Hapus artikel dari database
@@ -156,7 +156,8 @@ class ArtikelController extends Controller
     {
         //list Artikel
         $headlines = Artikel::where('type', 'headline')->get();
-        $artikels = Artikel::all();
+        $artikels = Artikel::orderBy('created_at', 'desc')->paginate(10);
+
         return view('UserPage.ListArtikelPage', compact('artikels', 'headlines'));
     }
 }

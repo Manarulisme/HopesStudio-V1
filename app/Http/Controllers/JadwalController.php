@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Models\CarouselImage;
 
 class JadwalController extends Controller
 {
@@ -17,7 +18,7 @@ class JadwalController extends Controller
      */
     public function index()
     {   //baca variabel jadwal
-        $jadwals = Jadwal::all();
+        $jadwals = Jadwal::latest()->paginate(10);
         //Redirect ke Index Jadwal
         return view('AdminPage.Jadwal.IndexJadwal', compact('jadwals'));
     }
@@ -112,19 +113,22 @@ class JadwalController extends Controller
         return redirect()->route('jadwal.index')->with('success', 'Jadwal deleted successfully.');
     }
 
-    public function listSchedule()
-    {
-      // Ambil jadwal hari ini
+public function listSchedule()
+{
     $jadwals = Jadwal::whereDate('tanggal', now()->toDateString())->get();
 
-    // Cek jika user sudah melakukan booking untuk setiap jadwal
     foreach ($jadwals as $jadwal) {
         $jadwal->isBooked = $jadwal->bookJadwals()->where('user_id', Auth::id())->exists();
     }
 
-    // Kirim data jadwals ke view
-    return view('UserPage.SchedulePage', compact('jadwals'));
-    }
+    // Ambil carousel kategori "Info Image Jadwal"
+    $infoImages = CarouselImage::whereHas('category', function ($query) {
+        $query->where('name', 'Info Image Jadwal');
+    })->get();
+
+    return view('UserPage.SchedulePage', compact('jadwals', 'infoImages'));
+}
+
 
 public function searchSchedule(Request $request)
 {
@@ -140,7 +144,12 @@ public function searchSchedule(Request $request)
         $jadwal->isBooked = $jadwal->bookJadwals()->where('user_id', Auth::id())->exists();
     }
 
-    return view('UserPage.SchedulePage', compact('jadwals'));
+        // Ambil carousel kategori "Info Image Jadwal"
+    $infoImages = CarouselImage::whereHas('category', function ($query) {
+        $query->where('name', 'Info Image Jadwal');
+    })->get();
+
+    return view('UserPage.SchedulePage', compact('jadwals', 'infoImages'));
 }
 
     public function orderSchedule()

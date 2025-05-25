@@ -16,7 +16,9 @@ class PembayaranController extends Controller
     {
         //list Konfiramsi Pembayaran berdasarkan status_pembayaran 'pending'
         //baca variabel pembayaran
-        $pembayarans = Pembayaran::where('status_pembayaran', 'pending')->get();
+        $pembayarans = Pembayaran::where('status_pembayaran', 'pending')
+            ->latest()
+            ->paginate(10);
         return view('AdminPage.Konfirmasi.IndexKonfirmasi', compact('pembayarans'));
     }
 
@@ -133,8 +135,9 @@ class PembayaranController extends Controller
         return redirect()->route('paket_user')->with('success', 'Payment confirmation sent successfully.');
     }
 
-    public function bayarPaket()
+    public function bayarPaket($id)
     {
-        return view('UserPage.PayPackagePage');
+        $pembayaran = Pembayaran::with('paket')->findOrFail($id);
+        return view('UserPage.PayPackagePage', ['pembayaran' => $pembayaran]);
     }
 }

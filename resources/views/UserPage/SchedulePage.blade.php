@@ -4,8 +4,27 @@
 
 @section('content')
 <div class="max-w-md mx-auto bg-white min-h-screen p-4">
-    <img src="{{ asset('Assets/Images/information.png') }}" class="w-full mb-4 rounded-lg" alt="Promo">
 
+
+    {{-- Carousel Info Image Jadwal --}}
+    @if ($infoImages->isNotEmpty())
+    <div id="carousel-info-jadwal" class="relative w-full h-40 rounded-lg overflow-hidden mb-6">
+        <div class="flex transition-transform duration-500 ease-in-out" style="transform: translateX(0);" data-current-index="0">
+            @foreach ($infoImages as $image)
+                <img src="{{ asset('storage/' . $image->image_path) }}" alt="Info Jadwal {{ $loop->iteration }}" class="w-full h-40 object-cover flex-shrink-0">
+            @endforeach
+        </div>
+
+        <button onclick="prevSlide('carousel-info-jadwal')"
+                class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white px-2 py-1 rounded">
+            &#10094;
+        </button>
+        <button onclick="nextSlide('carousel-info-jadwal')"
+                class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white px-2 py-1 rounded">
+            &#10095;
+        </button>
+    </div>
+    @endif
 
     <div class="bg-white p-4 shadow-md rounded-lg mb-4 text-center">
         {{-- Notifikasi jika tanggal tidak diisi --}}
@@ -22,18 +41,18 @@
         </form>
     </div>
 
-@php
-    $selectedDate = \Carbon\Carbon::parse(request('tanggal', date('Y-m-d')));
-    $today = \Carbon\Carbon::today();
-@endphp
+    @php
+        $selectedDate = \Carbon\Carbon::parse(request('tanggal', date('Y-m-d')));
+        $today = \Carbon\Carbon::today();
+    @endphp
 
-<h2 class="text-lg font-bold mb-2">
-    @if ($selectedDate->isSameDay($today))
-        Jadwal Hari Ini
-    @else
-        Jadwal Tanggal {{ $selectedDate->translatedFormat('d F Y') }}
-    @endif
-</h2>
+    <h2 class="text-lg font-bold mb-2">
+        @if ($selectedDate->isSameDay($today))
+            Jadwal Hari Ini
+        @else
+            Jadwal Tanggal {{ $selectedDate->translatedFormat('d F Y') }}
+        @endif
+    </h2>
 
     <div class="bg-white p-4 shadow-md rounded-lg mb-24">
         @if ($jadwals->isEmpty())
@@ -61,4 +80,35 @@
         @endif
     </div>
 </div>
+
+<script>
+    function updateCarousel(carouselId) {
+        const carousel = document.getElementById(carouselId);
+        const track = carousel.querySelector('div.flex');
+        const currentIndex = parseInt(track.dataset.currentIndex || 0);
+        const slideWidth = carousel.offsetWidth;
+        track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+    }
+
+    function prevSlide(carouselId) {
+        const carousel = document.getElementById(carouselId);
+        const track = carousel.querySelector('div.flex');
+        let currentIndex = parseInt(track.dataset.currentIndex || 0);
+        const slidesCount = track.children.length;
+        currentIndex = (currentIndex > 0) ? currentIndex - 1 : slidesCount - 1;
+        track.dataset.currentIndex = currentIndex;
+        updateCarousel(carouselId);
+    }
+
+    function nextSlide(carouselId) {
+        const carousel = document.getElementById(carouselId);
+        const track = carousel.querySelector('div.flex');
+        let currentIndex = parseInt(track.dataset.currentIndex || 0);
+        const slidesCount = track.children.length;
+        currentIndex = (currentIndex < slidesCount - 1) ? currentIndex + 1 : 0;
+        track.dataset.currentIndex = currentIndex;
+        updateCarousel(carouselId);
+    }
+</script>
+
 @endsection

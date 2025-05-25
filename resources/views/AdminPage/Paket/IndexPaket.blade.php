@@ -49,8 +49,13 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="mt-4">
+                        {{ $pakets->links() }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </x-app-layout>
+

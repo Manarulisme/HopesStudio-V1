@@ -29,10 +29,7 @@ class BookJadwalController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
@@ -64,7 +61,7 @@ class BookJadwalController extends Controller
         //Update Jadwal table kolom jumlah_peserta +1
         Jadwal::where('id', $bookjadwal->jadwal_id)->update(['jumlah_peserta' => $bookjadwal->jadwal->jumlah_peserta + 1]);
 
-       //update Jadwal table kolom kuota -1
+        //update Jadwal table kolom kuota -1
         Jadwal::where('id', $bookjadwal->jadwal_id)->update(['kuota' => $bookjadwal->jadwal->kuota - 1]);
 
         //if Jadwal kuota = 0, update status to nonaktif
@@ -80,7 +77,8 @@ class BookJadwalController extends Controller
      * Display the specified resource.
      */
     public function show($id)
-    {   $detailjadwal = Jadwal::findOrFail($id);
+    {
+        $detailjadwal = Jadwal::findOrFail($id);
         return view('UserPage.OrderScedulePage', compact('detailjadwal'));
     }
 
@@ -103,68 +101,111 @@ class BookJadwalController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(BookJadwal $bookJadwal)
+    public function destroy($id)
     {
-        //
+        DB::beginTransaction();
+
+        try {
+            $booking = BookJadwal::findOrFail($id);
+
+            // Validasi agar user hanya bisa hapus booking miliknya
+            if ($booking->user_id !== Auth::id()) {
+                return back()->with('error', 'Anda tidak memiliki izin untuk membatalkan jadwal ini.');
+            }
+
+            $jadwal = $booking->jadwal;
+            $aktifPaket = $booking->aktifPaket;
+
+            // Hapus booking
+            $booking->delete();
+
+            // Kembalikan kuota jadwal
+            if ($jadwal) {
+                $jadwal->decrement('peserta');
+                $jadwal->increment('kuota');
+
+                // Jika jadwal sebelumnya nonaktif karena kuota habis, aktifkan kembali
+                if ($jadwal->kuota > 0 && $jadwal->status == 'nonaktif') {
+                    $jadwal->update(['status' => 'aktif']);
+                }
+            }
+
+            // Kembalikan sisa sesi
+            if ($aktifPaket) {
+                $aktifPaket->increment('sisa_sesi');
+
+                // Jika sebelumnya statusnya nonaktif karena 0 sesi, aktifkan lagi
+                if ($aktifPaket->sisa_sesi > 0 && $aktifPaket->status_paket == 'nonaktif') {
+                    $aktifPaket->update(['status_paket' => 'aktif']);
+                }
+            }
+
+            DB::commit();
+
+            return back()->with('success', 'Booking berhasil dibatalkan.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan saat membatalkan booking: ' . $e->getMessage());
+        }
     }
+
 
     public function bookingJadwal(Request $request)
-{
-    $request->validate([
-        'jadwal_id' => 'required|exists:jadwals,id',
-    ]);
-
-    DB::beginTransaction();
-
-    try {
-        $user = Auth::user();
-        $jadwal = Jadwal::findOrFail($request->jadwal_id);
-        $aktifPaket = $user->aktifPakets()->where('status_paket', 'aktif')->firstOrFail();
-
-        // Cek kuota & sisa sesi
-        if ($jadwal->kuota <= 0) {
-            return back()->with('error', 'Kuota sesi ini sudah penuh.');
-        }
-
-        if ($aktifPaket->sisa_sesi <= 0) {
-            return back()->with('error', 'Sisa sesi Anda sudah habis.');
-        }
-
-        // Simpan booking
-        $bookjadwal = BookJadwal::create([
-            'jadwal_id'       => $jadwal->id,
-            'user_id'         => $user->id,
-            'aktif_paket_id'  => $aktifPaket->id,
-            'status'          => 'selesai',
-            'tanggal_booking' => $jadwal->tanggal,
+    {
+        $request->validate([
+            'jadwal_id' => 'required|exists:jadwals,id',
         ]);
 
-        // Kurangi sisa sesi dan refresh data
-        $aktifPaket->decrement('sisa_sesi');
-        $aktifPaket->refresh();
+        DB::beginTransaction();
 
-        // Jika sisa sesi sudah habis, update status paket jadi nonaktif
-        if ($aktifPaket->sisa_sesi <= 0) {
-            $aktifPaket->update(['status_paket' => 'nonaktif']);
+        try {
+            $user = Auth::user();
+            $jadwal = Jadwal::findOrFail($request->jadwal_id);
+            $aktifPaket = $user->aktifPakets()->where('status_paket', 'aktif')->firstOrFail();
+
+            // Cek kuota & sisa sesi
+            if ($jadwal->kuota <= 0) {
+                return back()->with('error', 'Kuota sesi ini sudah penuh.');
+            }
+
+            if ($aktifPaket->sisa_sesi <= 0) {
+                return back()->with('error', 'Sisa sesi Anda sudah habis.');
+            }
+
+            // Simpan booking
+            $bookjadwal = BookJadwal::create([
+                'jadwal_id'       => $jadwal->id,
+                'user_id'         => $user->id,
+                'aktif_paket_id'  => $aktifPaket->id,
+                'status'          => 'dipesan',
+                'tanggal_booking' => $jadwal->tanggal,
+            ]);
+
+            // Kurangi sisa sesi dan refresh data
+            $aktifPaket->decrement('sisa_sesi');
+            $aktifPaket->refresh();
+
+            // Jika sisa sesi sudah habis, update status paket jadi nonaktif
+            if ($aktifPaket->sisa_sesi <= 0) {
+                $aktifPaket->update(['status_paket' => 'nonaktif']);
+            }
+
+            // Update jadwal peserta dan kuota
+            $jadwal->increment('peserta');
+            $jadwal->decrement('kuota');
+            $jadwal->refresh();
+
+            // Jika kuota sudah habis, update status jadwal jadi nonaktif
+            if ($jadwal->kuota <= 0) {
+                $jadwal->update(['status' => 'nonaktif']);
+            }
+
+            DB::commit();
+
+            return redirect()->route('paket_user')->with('success', 'Booking berhasil!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan saat booking: ' . $e->getMessage());
         }
-
-        // Update jadwal peserta dan kuota
-        $jadwal->increment('peserta');
-        $jadwal->decrement('kuota');
-        $jadwal->refresh();
-
-        // Jika kuota sudah habis, update status jadwal jadi nonaktif
-        if ($jadwal->kuota <= 0) {
-            $jadwal->update(['status' => 'nonaktif']);
-        }
-
-        DB::commit();
-
-        return redirect()->route('paket_user')->with('success', 'Booking berhasil!');
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return back()->with('error', 'Terjadi kesalahan saat booking: ' . $e->getMessage());
     }
-}
-
 }

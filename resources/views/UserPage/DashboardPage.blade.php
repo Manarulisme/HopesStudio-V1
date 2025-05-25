@@ -4,7 +4,11 @@
 
 @section('content')
 
+<!-- Tambahkan Alpine.js -->
+<script src="https://unpkg.com/alpinejs" defer></script>
+
 <div class="max-w-md mx-auto bg-white min-h-screen">
+    <!-- Header -->
     <div class="flex items-center justify-between p-4">
         <div class="flex items-center space-x-2">
             <img src="{{ asset('Assets/Images/logo.png') }}" alt="Logo" class="w-8 h-8 rounded-full">
@@ -12,83 +16,70 @@
         </div>
     </div>
 
+    <!-- Carousel -->
     <div class="p-4">
-        <div id="carousel-hero" class="relative w-full h-48 rounded-lg overflow-hidden">
-            <div class="flex transition-transform duration-500 ease-in-out transform">
-                <img src="{{ asset('Assets/Images/hero_pilates.png') }}" alt="Workout" class="w-full h-full object-cover">
-                <img src="{{ asset('Assets/Images/hero_pilates.png') }}" alt="Workout" class="w-full h-full object-cover">
+        @if ($carouselImages->count())
+            <div class="relative w-full h-48 rounded-lg overflow-hidden"
+                x-data="{ index: 0 }"
+                x-init="setInterval(() => { index = (index + 1) % {{ $carouselImages->count() }} }, 5000)">
+
+                @foreach ($carouselImages as $image)
+                    <img src="{{ asset('storage/' . $image->image_path) }}"
+                        alt="Carousel Image"
+                        class="w-full h-48 object-cover absolute top-0 left-0 transition-opacity duration-700"
+                        x-show="index === {{ $loop->index }}"
+                        x-transition.opacity>
+                @endforeach
+
+                <!-- Tombol Prev -->
+                <button @click="index = (index - 1 + {{ $carouselImages->count() }}) % {{ $carouselImages->count() }}"
+                    class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white px-2 py-1 rounded hover:bg-opacity-75 z-10">
+                    ‹
+                </button>
+
+                <!-- Tombol Next -->
+                <button @click="index = (index + 1) % {{ $carouselImages->count() }}"
+                    class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white px-2 py-1 rounded hover:bg-opacity-75 z-10">
+                    ›
+                </button>
             </div>
-            <button onclick="prevSlide('carousel-hero')" class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-800 text-white px-2 py-1">Prev</button>
-            <button onclick="nextSlide('carousel-hero')" class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-800 text-white px-2 py-1">Next</button>
-        </div>
-
-        <script>
-            function updateCarousel(carouselId) {
-                const carousel = document.getElementById(carouselId);
-                const slideWidth = carousel.children[0].offsetWidth;
-                carousel.style.transform = `translateX(-${carousel.dataset.currentIndex * slideWidth}px)`;
-            }
-
-            function prevSlide(carouselId) {
-                const carousel = document.getElementById(carouselId);
-                const currentIndex = parseInt(carousel.dataset.currentIndex || 0);
-                carousel.dataset.currentIndex = (currentIndex > 0) ? currentIndex - 1 : 1;
-                updateCarousel(carouselId);
-            }
-
-            function nextSlide(carouselId) {
-                const carousel = document.getElementById(carouselId);
-                const currentIndex = parseInt(carousel.dataset.currentIndex || 0);
-                carousel.dataset.currentIndex = (currentIndex < 1) ? 0 : currentIndex + 1;
-                updateCarousel(carouselId);
-            }
-
-            setInterval(() => {
-                nextSlide('carousel-hero');
-            }, 5000);
-        </script>
+        @else
+            <div class="text-center text-gray-500">Belum ada gambar carousel.</div>
+        @endif
     </div>
 
+    <!-- Paket Terpopuler -->
     <div class="p-4 mb-16">
         <h2 class="text-lg font-bold mb-2">Paket Terpopuler</h2>
         <div class="space-y-4">
 
             @php
-            // Cek apakah user punya paket dengan status 'aktif' atau 'pending'
-            $hasBlockedPaket = $userPakets->contains(function ($paket) {
-                return in_array($paket->status_paket, ['aktif', 'pending']);
-            });
-        @endphp
+                $hasBlockedPaket = $userPakets->contains(function ($paket) {
+                    return in_array($paket->status_paket, ['aktif', 'pending']);
+                });
+            @endphp
 
-        {{-- Opsional: Notifikasi --}}
-        @if ($hasBlockedPaket)
-            <div class="mb-4 p-4 bg-yellow-100 text-yellow-800 rounded-md shadow">
-                Anda memiliki paket yang sedang berlangsung atau menunggu konfirmasi. Pemesanan baru tidak tersedia saat ini.
-            </div>
-        @endif
-
-        {{-- Loop semua pilihan paket --}}
-        @foreach ($pakets as $paket)
             @if ($hasBlockedPaket)
-                {{-- Disable klik jika ada paket aktif atau pending --}}
-                <div class="relative w-full h-24 rounded-lg overflow-hidden mb-4 bg-gray-200 dark:bg-gray-800 opacity-50 cursor-not-allowed">
-                    <img src="{{ asset('Assets/Images/dashboard-popular.png') }}" alt="{{ $paket->nama_paket }}" class="w-full h-full object-cover opacity-90">
-                    <span class="absolute top-4 left-4 text-white dark:text-gray-300 text-xl font-bold">{{ $paket->nama_paket }}</span>
+                <div class="mb-4 p-4 bg-yellow-100 text-yellow-800 rounded-md shadow">
+                    Anda memiliki paket yang sedang berlangsung atau menunggu konfirmasi. Pemesanan baru tidak tersedia saat ini.
                 </div>
-            @else
-                {{-- Bisa klik jika tidak ada paket aktif/pending --}}
-                <a href="{{ route('order-paket.show', ['order_paket' => $paket->id]) }}">
-                    <div class="relative w-full h-24 rounded-lg overflow-hidden mb-4 hover:scale-[1.02] transition-transform duration-300 shadow-lg">
+            @endif
+
+            @foreach ($pakets as $paket)
+                @if ($hasBlockedPaket)
+                    <div class="relative w-full h-24 rounded-lg overflow-hidden mb-4 bg-gray-200 opacity-50 cursor-not-allowed">
                         <img src="{{ asset('Assets/Images/dashboard-popular.png') }}" alt="{{ $paket->nama_paket }}" class="w-full h-full object-cover opacity-90">
                         <span class="absolute top-4 left-4 text-white text-xl font-bold">{{ $paket->nama_paket }}</span>
                     </div>
-                </a>
-            @endif
-        @endforeach
-
-
-
-
+                @else
+                    <a href="{{ route('order-paket.show', ['order_paket' => $paket->id]) }}">
+                        <div class="relative w-full h-24 rounded-lg overflow-hidden mb-4 hover:scale-[1.02] transition-transform duration-300 shadow-lg">
+                            <img src="{{ asset('Assets/Images/dashboard-popular.png') }}" alt="{{ $paket->nama_paket }}" class="w-full h-full object-cover opacity-90">
+                            <span class="absolute top-4 left-4 text-white text-xl font-bold">{{ $paket->nama_paket }}</span>
+                        </div>
+                    </a>
+                @endif
+            @endforeach
 
         </div>
     </div>

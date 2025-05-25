@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
+use App\Models\CarouselImage;
+use App\Models\BookJadwal;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -32,7 +34,7 @@ class PaketController extends Controller
     public function index(): View
     {
 
-        $pakets = Paket::all();
+        $pakets = Paket::paginate(10);
 
         return view('AdminPage.Paket.IndexPaket', compact('pakets'));
     }
@@ -128,25 +130,38 @@ class PaketController extends Controller
         return redirect()->route('paket.index')->with('success', 'Paket deleted successfully.');
     }
 
-    public function aktifPaket()
-    {
-        // Get the authenticated user's ID
-        $userId = auth()->id();
+public function aktifPaket()
+{
+    $userId = auth()->id();
 
-        // Get packages with status 'aktif' and 'pending' that match the authenticated user's ID
-        $pakets = AktifPaket::where(function ($query) {
-            $query->where('status_paket', 'aktif')
-                ->orWhere('status_paket', 'pending');
-        })
-            ->where('user_id', $userId)
-            ->where('sisa_sesi', '>', 0)
-            ->get();
+    $pakets = AktifPaket::where(function ($query) {
+        $query->where('status_paket', 'aktif')
+              ->orWhere('status_paket', 'pending');
+    })
+    ->where('user_id', $userId)
+    ->where('sisa_sesi', '>', 0)
+    ->get();
 
-        return view('UserPage.ActivePackagePage', compact('pakets'));
-    }
+    // Ambil gambar carousel dengan kategori "Info Image Paket"
+    $infoImages = CarouselImage::whereHas('category', function ($q) {
+        $q->where('name', 'Info Image Paket');
+    })->get();
+
+    //Ambil jadwal booking
+$bookJadwals = BookJadwal::where('user_id', $userId)
+                         ->where('status', 'dipesan')
+                         ->orderBy('tanggal_booking', 'desc') // atau 'desc' untuk terbaru duluan
+                         ->get();
+
+
+    return view('UserPage.ActivePackagePage', compact('pakets', 'infoImages', 'bookJadwals'));
+}
+
 
     public function orderPaket()
     {
         return view('UserPage.OrderPackagePage');
     }
+
+
 }

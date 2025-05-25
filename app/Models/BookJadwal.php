@@ -7,9 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class BookJadwal extends Model
 {
-    protected $table = 'book_jadwals';
-    /** @use HasFactory<\Database\Factories\BookJadwalFactory> */
     use HasFactory;
+
     protected $fillable = [
         'jadwal_id',
         'user_id',
@@ -17,4 +16,19 @@ class BookJadwal extends Model
         'status',
         'aktif_paket_id'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function jadwal()
+    {
+        return $this->belongsTo(Jadwal::class, 'jadwal_id');
+    }
+
+    public function aktifPaket()
+    {
+        return $this->belongsTo(AktifPaket::class, 'aktif_paket_id');
+    }
 }

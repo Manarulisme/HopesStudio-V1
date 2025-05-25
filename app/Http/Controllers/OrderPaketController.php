@@ -58,7 +58,8 @@ class OrderPaketController extends Controller
             'pembayaran_id' => $pembayaran->id,
         ]);
 
-        return redirect()->route('paket_user')->with('success', 'Paket berhasil dipesan.');
+       return redirect()->route('pembayaran_user', ['id' => $pembayaran->id])->with('success', 'Paket berhasil dipesan.');
+
     }
 
     public function showPayPackagePage($id)

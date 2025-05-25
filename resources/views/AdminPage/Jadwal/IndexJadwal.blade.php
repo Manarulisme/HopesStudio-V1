@@ -18,29 +18,37 @@
                         <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-200 rounded-lg shadow-md">
                             <thead class="bg-gray-100 dark:bg-gray-700">
                                 <tr>
-                                    <th class="px-4 py-2 border-b text-left text-sm font-medium text-gray-600 dark:text-gray-300">No</th>
-                                    <th class="px-4 py-2 border-b text-left text-sm font-medium text-gray-600 dark:text-gray-300">Tanggal</th>
-                                    <th class="px-4 py-2 border-b text-left text-sm font-medium text-gray-600 dark:text-gray-300">Waktu Mulai</th>
-                                    <th class="px-4 py-2 border-b text-left text-sm font-medium text-gray-600 dark:text-gray-300">Waktu Selesai</th>
-                                    <th class="px-4 py-2 border-b text-left text-sm font-medium text-gray-600 dark:text-gray-300">Trainer</th>
-                                    <th class="px-4 py-2 border-b text-left text-sm font-medium text-gray-600 dark:text-gray-300">Foto Ruangan</th>
-                                    <th class="px-4 py-2 border-b text-left text-sm font-medium text-gray-600 dark:text-gray-300">Action</th>
+                                    <th class="px-4 py-2 border-b text-center text-sm font-medium text-gray-600 dark:text-gray-300">No</th>
+                                    <th class="px-4 py-2 border-b text-center text-sm font-medium text-gray-600 dark:text-gray-300">Tanggal</th>
+                                    <th class="px-4 py-2 border-b text-center text-sm font-medium text-gray-600 dark:text-gray-300">Waktu Mulai</th>
+                                    <th class="px-4 py-2 border-b text-center text-sm font-medium text-gray-600 dark:text-gray-300">Waktu Selesai</th>
+                                    <th class="px-4 py-2 border-b text-center text-sm font-medium text-gray-600 dark:text-gray-300">Trainer</th>
+                                    <th class="px-4 py-2 border-b text-center text-sm font-medium text-gray-600 dark:text-gray-300">Foto Ruangan</th>
+                                    <th class="px-4 py-2 border-b text-center text-sm font-medium text-gray-600 dark:text-gray-300">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($jadwals as $jadwal)
                                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300">{{ $loop->iteration }}</td>
-                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300">{{ $jadwal->tanggal }}</td>
-                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300">{{ $jadwal->waktu_mulai }}</td>
-                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300">{{ $jadwal->waktu_selesai }}</td>
-                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300">{{ $jadwal->trainer }}</td>
-                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300">
-                                        <a href="{{ asset('storage/' . $jadwal->foto_ruangan) }}" target="_blank">
-                                            <img src="{{ asset('storage/' . $jadwal->foto_ruangan) }}" alt="Foto Ruangan" class="w-24 h-24 object-cover rounded hover:cursor-pointer">
-                                        </a>
+                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300 text-center">{{ $loop->iteration }}</td>
+                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300 text-center">
+                                        {{ \Carbon\Carbon::parse($jadwal->tanggal)->translatedFormat('d F Y') }}
                                     </td>
-                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300">
+                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300 text-center">
+                                        {{ \Carbon\Carbon::parse($jadwal->waktu_mulai)->format('H:i') }}
+                                    </td>
+                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300 text-center">
+                                        {{ \Carbon\Carbon::parse($jadwal->waktu_selesai)->format('H:i') }}
+                                    </td>
+                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300 text-center">{{ $jadwal->trainer }}</td>
+                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300 text-center">
+                                        <div class="flex justify-center">
+                                            <a href="{{ asset('storage/' . $jadwal->foto_ruangan) }}" target="_blank">
+                                                <img src="{{ asset('storage/' . $jadwal->foto_ruangan) }}" alt="Foto Ruangan" class="w-24 h-24 object-cover rounded hover:cursor-pointer">
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-2 border-b text-sm text-gray-700 dark:text-gray-300 text-center">
                                         <a href="{{ route('jadwal.edit', $jadwal->id) }}" class="inline-block bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 mr-2">Edit</a>
                                         <form action="{{ route('jadwal.destroy', $jadwal->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this schedule?');">
                                             @csrf
@@ -54,8 +62,12 @@
                         </table>
                     </div>
 
+                    <div class="mt-4">
+                        {{ $jadwals->links() }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </x-app-layout>
+

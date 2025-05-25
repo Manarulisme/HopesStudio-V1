@@ -24,6 +24,12 @@
                     <x-nav-link :href="route('pembayaran.index')" :active="request()->routeIs('pembayaran.index')">
                         {{ __('Konfirmasi Pembayaran') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('kehadiran_user')" :active="request()->routeIs('kehadiran_user')">
+                        {{ __('Kehadiran') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('index_carousel_images')" :active="request()->routeIs('index_carousel_images')">
+                        {{ __('Carousel Image') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('artikel.index')" :active="request()->routeIs('artikel.index')">
                         {{ __('Artikel') }}
                     </x-nav-link>

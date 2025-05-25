@@ -54,60 +54,38 @@ class UserProfilController extends Controller
     /**
      * Update the specified resource in storage.
      */
-        public function update(Request $request, string $id)
-        {
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'nik' => 'nullable|string|max:255',
-                'alamat' => 'nullable|string|max:255',
-                'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-                'no_telepon' => 'nullable|string|max:255',
-                'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            ]);
+    public function update(Request $request, string $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'nik' => 'nullable|string|max:255',
+            'alamat' => 'nullable|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'no_telepon' => 'nullable|string|max:255',
+            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
 
-            $user = User::findOrFail($id);
+        $user = User::findOrFail($id);
 
-            if ($request->hasFile('foto_profil') && $request->file('foto_profil')->isValid()) {
-                $foto_profil = $request->file('foto_profil');
+        $data = $request->only('name', 'nik', 'alamat', 'email', 'no_telepon');
 
-                // Ensure the directory exists
-                if (!file_exists(public_path('Assets/Images/foto_profil'))) {
-                    mkdir(public_path('Assets/Images/foto_profil'), 0755, true);
-                }
-
-                // Move the new file
-                $foto_profil->move(public_path('Assets/Images/foto_profil'), $foto_profil->hashName());
-
-                // Delete the old file if it exists
-                if ($user->foto_profil) {
-                    $oldFilePath = public_path('Assets/Images/foto_profil/' . $user->foto_profil);
-                    if (file_exists($oldFilePath)) {
-                        unlink($oldFilePath);
-                    }
-                }
-
-                // Update user with the new file
-                $user->update([
-                    'foto_profil' => $foto_profil->hashName(),
-                    'name' => $request->name,
-                    'nik' => $request->nik,
-                    'alamat' => $request->alamat,
-                    'email' => $request->email,
-                    'no_telepon' => $request->no_telepon,
-                ]);
-            } else {
-                // Update user without the file
-                $user->update([
-                    'name' => $request->name,
-                    'nik' => $request->nik,
-                    'alamat' => $request->alamat,
-                    'email' => $request->email,
-                    'no_telepon' => $request->no_telepon,
-                ]);
+        if ($request->hasFile('foto_profil') && $request->file('foto_profil')->isValid()) {
+            // Hapus file lama jika ada
+            if ($user->foto_profil && Storage::disk('public')->exists('foto_profil/' . $user->foto_profil)) {
+                Storage::disk('public')->delete('foto_profil/' . $user->foto_profil);
             }
 
-            return redirect()->route('profil-user.index')->with('success', 'Profile updated successfully.');
+            // Simpan file baru di storage/app/public/foto_profil
+            $path = $request->file('foto_profil')->store('foto_profil', 'public');
+
+            $data['foto_profil'] = basename($path);
+        }
+
+        $user->update($data);
+
+        return redirect()->route('profil-user.index')->with('success', 'Profile updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -116,5 +94,4 @@ class UserProfilController extends Controller
     {
         //
     }
-
 }

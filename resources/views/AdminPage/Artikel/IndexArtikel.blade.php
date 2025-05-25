@@ -44,13 +44,15 @@
                                                         Hapus
                                                     </button>
                                                 </form>
-                                                </form>
                                             </div>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="mt-6">
+                            {{ $artikels->links() }}
+                        </div>
                     </div>
 
                 </div>
@@ -58,3 +60,4 @@
         </div>
     </div>
 </x-app-layout>
+
