@@ -17,13 +17,13 @@
 
             <div class="flex items-center justify-between mb-3">
                 <img src="{{ asset('Assets/Images/logo/logo_bank_bca.png') }}" alt="BCA Logo" class="h-6">
-                <p class="text-sm text-right">An. Hopes Studio</p>
+                <p class="text-sm text-right">An. Dwi I Sudargo</p>
             </div>
 
             <div class="mb-2 flex items-center space-x-2">
                 <div>
                     <p class="text-sm text-gray-600">Nomor Rekening</p>
-                    <p id="nomorRekening" class="text-lg font-semibold text-blue-600 tracking-wide select-all">2831374717</p>
+                    <p id="nomorRekening" class="text-lg font-semibold text-blue-600 tracking-wide select-all">2550021211</p>
                 </div>
                 <button id="copyBtn"
                     class="bg-blue-500 hover:bg-blue-700 text-white text-sm px-3 py-1 rounded transition"
@@ -59,7 +59,7 @@
         <p class="mb-3">
             Apabila anda kesulitan dan mengalami masalah, silahkan untuk menghubungi No. Whatsapp pada tombol di bawah ini sekarang juga.
         </p>
-        <a href="https://wa.me/628xxxxxxxxxx" target="_blank"
+        <a href="https://wa.link/gfx9hq" target="_blank"
            class="w-full bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition text-center block">
             Konsultasi Masalah
         </a>

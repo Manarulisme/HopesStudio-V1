@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\AktifPaket;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 
 
@@ -115,6 +116,11 @@ class BookJadwalController extends Controller
 
             $jadwal = $booking->jadwal;
             $aktifPaket = $booking->aktifPaket;
+
+            // Jika jadwal kurang dari 24 jam, tidak bisa dihapus
+            if (Carbon::parse($jadwal->tanggal_booking)->diffInHours(Carbon::now()) < 24) {
+                return back()->with('error', 'Jadwal yang dibatalkan kurang dari 24 jam. Anda tidak dapat membatalkan jadwal ini.');
+            }
 
             // Hapus booking
             $booking->delete();

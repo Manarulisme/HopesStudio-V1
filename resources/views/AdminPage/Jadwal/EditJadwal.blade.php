@@ -13,11 +13,12 @@
                     <a href="{{ route('jadwal.index') }}" class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-4">
                         Kembali
                     </a>
-                    <form action="{{ route('jadwal.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                    <form action="{{ route('jadwal.update', $jadwal->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                        @method('PUT')
                         @csrf
                         <div class="space-y-2">
                             <label for="tanggal" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tanggal</label>
-                            <input type="date" name="tanggal" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="{{ old('tanggal') }}">
+                            <input type="date" name="tanggal" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="{{ old('tanggal', $jadwal->tanggal) }}">
                             @error('tanggal')
                                 <span class="text-sm text-red-500">{{ $message }}</span>
                             @enderror
@@ -25,7 +26,7 @@
 
                         <div class="space-y-2">
                             <label for="waktu_mulai" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Waktu Mulai</label>
-                            <input type="time" name="waktu_mulai" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="{{ old('waktu_mulai') }}">
+                            <input type="time" name="waktu_mulai" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="{{ old('waktu_mulai', $jadwal->waktu_mulai) }}">
                             @error('waktu_mulai')
                                 <span class="text-sm text-red-500">{{ $message }}</span>
                             @enderror
@@ -33,7 +34,7 @@
 
                         <div class="space-y-2">
                             <label for="waktu_selesai" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Waktu Selesai</label>
-                            <input type="time" name="waktu_selesai" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="{{ old('waktu_selesai') }}">
+                            <input type="time" name="waktu_selesai" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="{{ old('waktu_selesai', $jadwal->waktu_selesai) }}">
                             @error('waktu_selesai')
                                 <span class="text-sm text-red-500">{{ $message }}</span>
                             @enderror
@@ -49,7 +50,7 @@
 
                         <div class="space-y-2">
                             <label for="trainer" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Trainer</label>
-                            <input type="text" name="trainer" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="{{ old('trainer') }}">
+                            <input type="text" name="trainer" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="{{ old('trainer', $jadwal->trainer) }}">
                             @error('trainer')
                                 <span class="text-sm text-red-500">{{ $message }}</span>
                             @enderror
@@ -58,8 +59,8 @@
                         <div class="space-y-2">
                             <label for="jenis_pelatihan" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Jenis Pelatihan</label>
                             <select name="jenis_pelatihan" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                <option value="stik" {{ old('jenis_pelatihan') == 'stik' ? 'selected' : '' }}>Stik</option>
-                                <option value="nonstik" {{ old('jenis_pelatihan') == 'nonstik' ? 'selected' : '' }}>Nonstik</option>
+                                <option value="stik" {{ old('jenis_pelatihan', $jadwal->jenis_pelatihan) == 'stik' ? 'selected' : '' }}>Stik</option>
+                                <option value="nonstik" {{ old('jenis_pelatihan', $jadwal->jenis_pelatihan) == 'nonstik' ? 'selected' : '' }}>Nonstik</option>
                             </select>
                             @error('jenis_pelatihan')
                                 <span class="text-sm text-red-500">{{ $message }}</span>
@@ -68,7 +69,7 @@
 
                         <div class="space-y-2">
                             <label for="ruang" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Ruangan</label>
-                            <input type="text" name="ruang" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="{{ old('ruang') }}">
+                            <input type="text" name="ruang" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="{{ old('ruang', $jadwal->ruang) }}">
                             @error('ruang')
                                 <span class="text-sm text-red-500">{{ $message }}</span>
                             @enderror
@@ -76,7 +77,7 @@
 
                         <div class="space-y-2">
                             <label for="kuota" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Kuota</label>
-                            <input type="number" name="kuota" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="{{ old('kuota') }}">
+                            <input type="number" name="kuota" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="{{ old('kuota', $jadwal->kuota) }}">
                             @error('kuota')
                                 <span class="text-sm text-red-500">{{ $message }}</span>
                             @enderror
@@ -89,3 +90,4 @@
         </div>
     </div>
 </x-app-layout>
+

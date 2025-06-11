@@ -76,7 +76,11 @@
 
                         <div class="space-y-2">
                             <label for="sesi" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sesi</label>
-                            <input type="text" name="sesi" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="{{ old('sesi') }}">
+                            <select name="sesi" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                @for ($i = 1; $i <= 20; $i++)
+                                    <option value="{{ $i }}" {{ old('sesi') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                @endfor
+                            </select>
                             @error('sesi')
                                 <span class="text-sm text-red-500">{{ $message }}</span>
                             @enderror
